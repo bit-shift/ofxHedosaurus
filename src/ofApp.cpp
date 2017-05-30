@@ -12,8 +12,8 @@ void ofApp::setup(){
 	// FBO sources should be added before piMapper.setup() so the
 	// piMapper is able to load the source if it is assigned to
 	// a surface in XML settings.
-	crossSource = new CrossSource();
-	piMapper.registerFboSource(crossSource);
+	_skinSource = new SkinSource();
+	piMapper.registerFboSource(_skinSource);
 	piMapper.setup();
 
 	// The info layer is hidden by default, press <i> to toggle

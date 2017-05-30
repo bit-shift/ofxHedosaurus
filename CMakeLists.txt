@@ -20,7 +20,7 @@ set( OF_DIRECTORY_BY_USER "../../.." )
 set( ${APP_NAME}_SOURCE_FILES
         src/main.cpp
         src/ofApp.cpp
-        src/CrossSource.cpp
+        src/SkinSource.cpp
         src/CustomSource.cpp
         src/Settings.cpp)
 
