@@ -1,3 +1,1 @@
-ofxPiMapper
-ofxXmlSettings
-ofxGui
+ofxGstRTP
