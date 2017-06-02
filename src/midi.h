@@ -57,7 +57,7 @@ public:
         for(const auto& trigger: trigger_)
         {
             if (trigger.control_ == msg_.control)
-                trigger.fn_(msg_.value);
+                trigger.fn_(msg_.control);
         }
     }
 
