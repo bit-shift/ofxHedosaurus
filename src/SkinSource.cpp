@@ -27,7 +27,6 @@ void SkinSource::setup()
 	// RED
 	midi_in_.add_trigger(midi::trigger_t{ 100, [this](const size_t value){ 
 		image::set_channel(overlay_px_, 0, value * 2);
-		ofLogNotice("SkinSource", "image::set_channel");
 	}});
 
 	// GREEN
