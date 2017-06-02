@@ -3,14 +3,20 @@
 #include "ofMain.h"
 #include "FboSource.h"
 
+#include "ofxCvColorImage.h"
+
 class SkinSource : public ofx::piMapper::FboSource {
-	public:
-		SkinSource();
 
-		void setup();
-		void draw();
+public:
+	SkinSource();
 
-		ofShader _shader;
-    	ofPlanePrimitive _plane;
-		ofImage _img;
+	void setup();
+	void draw();
+
+private:
+	ofxCvColorImage image_;
+	ofImage overlay_;
+	ofPixels overlay_px_;
+
+	ofParameter<size_t> saturation_; 
 };

@@ -32,7 +32,10 @@ void ofApp::draw(){
 }
 
 void ofApp::keyPressed(int key){
-	piMapper.keyPressed(key);
+	if (key == 'f')
+		ofToggleFullscreen();
+	else
+		piMapper.keyPressed(key);
 }
 
 void ofApp::keyReleased(int key){
