@@ -1,5 +1,7 @@
 #pragma once
 
+#include "midi.h"
+
 #include "ofMain.h"
 #include "FboSource.h"
 
@@ -18,5 +20,7 @@ private:
 	ofImage overlay_;
 	ofPixels overlay_px_;
 
-	ofParameter<size_t> saturation_; 
+	midi::in midi_in_;
+
+	ofParameter<size_t> saturation_;
 };

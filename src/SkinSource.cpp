@@ -29,6 +29,8 @@ void SkinSource::draw()
 	ofBackground(0); // this matters
 	ofEnableBlendMode(OF_BLENDMODE_ADD);
 
+	midi::log_message(midi_in_.message());
+
 	overlay_px_.setColor(ofColor::blue);
 	overlay_.setFromPixels(overlay_px_);
 	
