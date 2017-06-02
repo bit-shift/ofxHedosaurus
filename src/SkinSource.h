@@ -17,6 +17,7 @@ public:
 
 private:
 	ofxCvColorImage image_;
+	ofxCvColorImage image2_;
 	ofImage overlay_;
 	ofPixels overlay_px_;
 
