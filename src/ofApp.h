@@ -1,5 +1,7 @@
 #pragma once
 
+#include "midi.h"
+
 #include "ofMain.h"
 #include "Settings.h"
 #include "ofxPiMapper.h"
@@ -11,6 +13,7 @@ class ofApp : public ofBaseApp {
 		void setup();
 		void update();
 		void draw();
+		void exit();
 	
 		void keyPressed(int key);
 		void keyReleased(int key);
@@ -20,8 +23,8 @@ class ofApp : public ofBaseApp {
 		void mouseDragged(int x, int y, int button);
 
 		ofxPiMapper piMapper;
+		
+		midi::in midi_in_;
 
-		// By using a custom source that is derived from FboSource
-		// you will be able to see the source listed in sources editor
 		SkinSource * _skinSource;
 };

@@ -16,8 +16,14 @@ inline void log_message(const ofxMidiMessage& message)
 	ofLogNotice("midi", "dtime: " + to_string(message.deltatime));
 }
 
+struct trigger_t {
+    size_t control_;
+    std::function<void(const size_t value)> fn_;
+};
+
 class in : public ofxMidiListener {
 public:
+
     in()
     {
         in_.listPorts(); // via instance
@@ -39,19 +45,36 @@ public:
         in_.setVerbose(true);
     }
 
+    ~in()
+    {
+        in_.closePort();
+	    in_.removeListener(this);
+    }
+
     void newMidiMessage(ofxMidiMessage& event) 
     { 
         msg_ = event;
+        for(const auto& trigger: trigger_)
+        {
+            if (trigger.control_ == msg_.control)
+                trigger.fn_(msg_.value);
+        }
     }
 
-    const ofxMidiMessage& message()
+    const ofxMidiMessage& message() const
     {
         return msg_;
+    }
+
+    void add_trigger(const trigger_t& trigger)
+    {
+        trigger_.push_back(trigger);
     }
 
 private:
     ofxMidiIn in_;
     ofxMidiMessage msg_;
+    vector<trigger_t> trigger_;
 };
 
 } // midi

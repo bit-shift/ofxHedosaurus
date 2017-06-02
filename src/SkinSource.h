@@ -10,7 +10,7 @@
 class SkinSource : public ofx::piMapper::FboSource {
 
 public:
-	SkinSource();
+	SkinSource(midi::in& midi_in);
 
 	void setup();
 	void draw();
@@ -20,7 +20,7 @@ private:
 	ofImage overlay_;
 	ofPixels overlay_px_;
 
-	midi::in midi_in_;
+	midi::in& midi_in_;
 
 	ofParameter<size_t> saturation_;
 };

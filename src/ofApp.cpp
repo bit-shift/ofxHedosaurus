@@ -12,7 +12,7 @@ void ofApp::setup(){
 	// FBO sources should be added before piMapper.setup() so the
 	// piMapper is able to load the source if it is assigned to
 	// a surface in XML settings.
-	_skinSource = new SkinSource();
+	_skinSource = new SkinSource(midi_in_);
 	piMapper.registerFboSource(_skinSource);
 	piMapper.setup();
 
@@ -28,6 +28,10 @@ void ofApp::update(){
 }
 
 void ofApp::draw(){
+	piMapper.draw();
+}
+
+void ofApp::exit(){
 	piMapper.draw();
 }
 
