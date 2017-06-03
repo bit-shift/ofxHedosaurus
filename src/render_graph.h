@@ -19,22 +19,25 @@ public:
 
     void update()
     {        
-        image_.update();
+        if (draw_)
+            image_.update();
     }
 
     void draw()
     {
-        image_.draw(0, 0);
+        if (draw_)
+            image_.draw(0, 0);
     }
 
     void set_alpha(const size_t alpha)
     {
         image::set_channel(image_.getPixels(), 3, alpha);
+        draw_ = alpha == 0 ? false : true;
     }
 
 protected:
     ofImage image_;
-    size_t alpha_ = 255;
+    bool draw_ = true;
 };
 
 //-----------------------------------------------------------------------------
