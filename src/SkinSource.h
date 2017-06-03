@@ -1,6 +1,7 @@
 #pragma once
 
 #include "midi.h"
+#include <render_graph.h>
 
 #include "ofMain.h"
 #include "FboSource.h"
@@ -25,4 +26,6 @@ private:
 	midi::in& midi_in_;
 
 	ofParameter<size_t> saturation_;
+
+	pipeline::render_graph graph_;
 };
