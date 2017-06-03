@@ -25,7 +25,7 @@ SkinSource::SkinSource(midi::in& midi_in)
 
 void SkinSource::setup()
 {
-	// ALPHA
+	// ALPHA Master mixing
 	midi_in_.add_trigger(midi::trigger_t{ 117, [this](const size_t value){ 
 		node0_->parameters().get<size_t>("alpha").set(value * 2);
 	}});
@@ -36,6 +36,19 @@ void SkinSource::setup()
 
 	midi_in_.add_trigger(midi::trigger_t{ 14, [this](const size_t value){ 
 		node2_->parameters().get<size_t>("alpha").set(value * 2);
+	}});
+
+	// Color node
+	midi_in_.add_trigger(midi::trigger_t{ 102, [this](const size_t value){ 
+		node2_->parameters().get<size_t>("r").set(value * 2);
+	}});
+
+	midi_in_.add_trigger(midi::trigger_t{ 105, [this](const size_t value){ 
+		node2_->parameters().get<size_t>("g").set(value * 2);
+	}});
+
+	midi_in_.add_trigger(midi::trigger_t{ 61, [this](const size_t value){ 
+		node2_->parameters().get<size_t>("b").set(value * 2);
 	}});
 }
 

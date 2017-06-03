@@ -80,27 +80,40 @@ class color_node : public node {
 public:
     color_node() : node()
     {
-        ofColor black{ 125, 67, 15, 255 };
+        ofColor black{0, 0, 0, 0};
         ofPixels pxs;
         pxs.allocate(450, 300, OF_IMAGE_COLOR_ALPHA);
 	    pxs.setColor(black);
         image_.setFromPixels(pxs);
+
+        parameters_.add(r_.set("r", 0));
+        parameters_.add(g_.set("g", 0));
+        parameters_.add(b_.set("b", 0));
+
+        r_.addListener(this, &color_node::r_changed);
+        g_.addListener(this, &color_node::g_changed);
+        b_.addListener(this, &color_node::b_changed);
     }
 
-    void set_r(const size_t value)
+    void r_changed(size_t& r)
     {
-        image::set_channel(image_.getPixels(), 0, value);
+        image::set_channel(image_.getPixels(), 0, r);
     }
 
-    void set_g(const size_t value)
+    void g_changed(size_t& g)
     {
-        image::set_channel(image_.getPixels(), 1, value);
+        image::set_channel(image_.getPixels(), 1, g);
     }
 
-    void set_b(const size_t value)
+    void b_changed(size_t& b)
     {
-        image::set_channel(image_.getPixels(), 2, value);
+        image::set_channel(image_.getPixels(), 2, b);
     }
+
+private:
+    ofParameter<size_t> r_;
+    ofParameter<size_t> g_;
+    ofParameter<size_t> b_;
 };
 
 //-----------------------------------------------------------------------------
