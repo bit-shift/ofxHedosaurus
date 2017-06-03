@@ -27,15 +27,15 @@ void SkinSource::setup()
 {
 	// ALPHA
 	midi_in_.add_trigger(midi::trigger_t{ 117, [this](const size_t value){ 
-		node0_->set_alpha(value * 2);
+		node0_->parameters().get<size_t>("alpha").set(value * 2);
 	}});
 
 	midi_in_.add_trigger(midi::trigger_t{ 118, [this](const size_t value){ 
-		node1_->set_alpha(value * 2);
+		node1_->parameters().get<size_t>("alpha").set(value * 2);
 	}});
 
 	midi_in_.add_trigger(midi::trigger_t{ 14, [this](const size_t value){ 
-		node2_->set_alpha(value * 2);
+		node2_->parameters().get<size_t>("alpha").set(value * 2);
 	}});
 }
 

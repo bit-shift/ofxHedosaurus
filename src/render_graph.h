@@ -10,34 +10,40 @@ namespace pipeline {
 
 class node {
 public:
-    node() {}
-
-    ofImage& image()
-    { 
-        return image_; 
+    node()
+    {
+        parameters_.add(alpha_.set("alpha", 0));
+        alpha_.addListener(this, &node::alpha_changed);
     }
 
     void update()
     {        
-        if (draw_)
+        if (active_)
             image_.update();
     }
 
     void draw()
     {
-        if (draw_)
+        if (active_)
             image_.draw(0, 0);
     }
 
-    void set_alpha(const size_t alpha)
+    void alpha_changed(size_t& alpha)
     {
         image::set_channel(image_.getPixels(), 3, alpha);
-        draw_ = alpha == 0 ? false : true;
+        active_ = alpha == 0 ? false : true;
     }
 
+    ofImage& image() { return image_; }
+    ofParameterGroup& parameters() { return parameters_; }
+
 protected:
+    bool active_ = true;
+    
     ofImage image_;
-    bool draw_ = true;
+
+    ofParameterGroup parameters_;
+    ofParameter<size_t> alpha_;
 };
 
 //-----------------------------------------------------------------------------
@@ -53,7 +59,6 @@ public:
     }
 
 protected:
-    ofImage image_;
     node& input_;
 };
 
