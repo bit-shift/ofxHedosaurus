@@ -2,6 +2,8 @@
 
 #include <ofMain.h>
 
+#include <algorithms.h>
+
 namespace pipeline {
 
 //-----------------------------------------------------------------------------
@@ -10,26 +12,46 @@ class node {
 public:
     node() {}
 
-    ofImage& image() 
+    ofImage& image()
     { 
         return image_; 
     }
 
-    void add_input(node& node)
-    {
-        nodes_.push_back(node);
+    void update()
+    {        
+        image_.update();
     }
 
-    void update()
+    void draw()
     {
-        for (auto& node: nodes_)
-            node.update();
-        image_.update();
+        image_.draw(0, 0);
+    }
+
+    void set_alpha(const size_t alpha)
+    {
+        image::set_channel(image_.getPixels(), 3, alpha);
     }
 
 protected:
     ofImage image_;
-    vector<node> nodes_;
+    size_t alpha_ = 255;
+};
+
+//-----------------------------------------------------------------------------
+
+class input_node : public node {
+public:
+    input_node(node& input) : node(), input_(input) {}
+
+    void update()
+    {
+        input_.update();
+        node::update();
+    }
+
+protected:
+    ofImage image_;
+    node& input_;
 };
 
 //-----------------------------------------------------------------------------
@@ -40,64 +62,70 @@ public:
     {
         image_.load(filename);
     }
+};
 
-    void update()
+//-----------------------------------------------------------------------------
+
+using generate_fn = std::function<void(ofImage&)>;
+
+class color_node : public node {
+public:
+    color_node() : node()
     {
-        node::update();
+        ofColor black{ 125, 67, 15, 255 };
+        ofPixels pxs;
+        pxs.allocate(450, 300, OF_IMAGE_COLOR_ALPHA);
+	    pxs.setColor(black);
+        image_.setFromPixels(pxs);
+    }
+
+    void set_r(const size_t value)
+    {
+        image::set_channel(image_.getPixels(), 0, value);
+    }
+
+    void set_g(const size_t value)
+    {
+        image::set_channel(image_.getPixels(), 1, value);
+    }
+
+    void set_b(const size_t value)
+    {
+        image::set_channel(image_.getPixels(), 2, value);
     }
 };
 
 //-----------------------------------------------------------------------------
 
-class gen_node : public node {
+using node_ptr = std::shared_ptr<node>;
+
+class graph {
 public:
-    gen_node() : node()
-    {
-        
-    }
-
-    void update()
-    {
-        node::update();
-    }
-};
-
-//-----------------------------------------------------------------------------
-
-class mixer_node : public node {
-public:
-    mixer_node() : node() {}
+    graph() {}
 
     void update()
     {
         for (auto& node: nodes_)
         {
-            // do the actual mixing via the alpha channel
-            std::ignore = node.image();
+            node->update();
         }
-        node::update();
-    }
-};
-
-//-----------------------------------------------------------------------------
-
-class render_graph {
-public:
-    render_graph(node& root)
-    : root_(root) {}
-
-    void update()
-    {
-        root_.update();
     }
 
     void draw()
     {
-        root_.image().draw(0, 0);
+        for (auto& node: nodes_)
+        {
+            node->draw();
+        }
+    }
+
+    void add_input(node_ptr& node)
+    {
+        nodes_.push_back(node);
     }
 
 private:
-    node& root_;
+    vector<node_ptr> nodes_;
 };
 
 } // pipeline
