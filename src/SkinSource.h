@@ -13,11 +13,12 @@ public:
 	SkinSource(midi::in& midi_in);
 
 	void setup();
+	void update();
 	void draw();
 
 private:
-	ofxCvColorImage image_;
-	ofxCvColorImage image2_;
+	ofImage image_;
+	ofImage image2_;
 	ofImage overlay_;
 	ofPixels overlay_px_;
 
