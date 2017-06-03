@@ -2,6 +2,5 @@
 data/*.jpg
 data/settings.xml
 data/surfaces.xml
-example
 libs
 readMe.txt

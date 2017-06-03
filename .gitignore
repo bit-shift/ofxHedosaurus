@@ -4,3 +4,5 @@ obj
 *~
 config.make
 .vscode*
+bin/ofxHedosaurus
+bin/ofxHedosaurus2
