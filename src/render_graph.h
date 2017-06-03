@@ -10,16 +10,26 @@ class node {
 public:
     node() {}
 
-    virtual void process();
+    ofImage& image() 
+    { 
+        return image_; 
+    }
 
-    ofImage& image() { return image_; }
+    void add_input(node& node)
+    {
+        nodes_.push_back(node);
+    }
+
     void update()
     {
+        for (auto& node: nodes_)
+            node.update();
         image_.update();
     }
 
 protected:
     ofImage image_;
+    vector<node> nodes_;
 };
 
 //-----------------------------------------------------------------------------
@@ -31,9 +41,9 @@ public:
         image_.load(filename);
     }
 
-    void process()
+    void update()
     {
-
+        node::update();
     }
 };
 
@@ -46,56 +56,48 @@ public:
         
     }
 
-    void process()
+    void update()
     {
-
+        node::update();
     }
 };
 
 //-----------------------------------------------------------------------------
 
-class mixer_node {
+class mixer_node : public node {
 public:
-    mixer_node() {}
+    mixer_node() : node() {}
 
-    void add_input(node& node)
+    void update()
     {
-        in_nodes.push_back(node);
-    }
-
-    void draw()
-    {
-        for (auto& node: in_nodes)
+        for (auto& node: nodes_)
         {
             // do the actual mixing via the alpha channel
             std::ignore = node.image();
-            node.image().draw(0, 0);
         }
+        node::update();
     }
-private:
-    vector<node> in_nodes;
 };
 
 //-----------------------------------------------------------------------------
 
 class render_graph {
 public:
-    render_graph() {}
+    render_graph(node& root)
+    : root_(root) {}
 
-    void update() 
+    void update()
     {
-        for (auto& node: nodes_)
-            node.update();
+        root_.update();
     }
 
-    void draw() 
+    void draw()
     {
-        mixer_.draw();
+        root_.image().draw(0, 0);
     }
 
 private:
-    vector<node> nodes_;
-    mixer_node mixer_;
+    node& root_;
 };
 
 } // pipeline

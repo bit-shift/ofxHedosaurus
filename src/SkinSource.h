@@ -27,5 +27,8 @@ private:
 
 	ofParameter<size_t> saturation_;
 
+	pipeline::file_node image_node_;
+	pipeline::mixer_node mixer_node_;
+
 	pipeline::render_graph graph_;
 };
