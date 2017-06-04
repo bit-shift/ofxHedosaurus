@@ -20,8 +20,6 @@ public:
 
     void update()
     {        
-        if (active_)
-            image_.update();
     }
 
     void draw()
@@ -29,7 +27,7 @@ public:
         if (active_)
         {
             ofSetColor(255, 255, 255, alpha_.get());
-            image_.getTexture().draw(0, 0);
+            texture_.draw(0, 0);
         }  
     }
 
@@ -38,13 +36,12 @@ public:
         active_ = alpha == 0 ? false : true;
     }
 
-    ofImage& image() { return image_; }
     ofParameterGroup& parameters() { return parameters_; }
 
 protected:
     bool active_ = true;
     
-    ofImage image_;
+    ofTexture texture_;
 
     ofParameterGroup parameters_;
     ofParameter<size_t> alpha_;
@@ -72,7 +69,9 @@ class file_node : public node {
 public:
     file_node(const std::string filename) : node()
     {
-        image_.load(filename);
+        ofImage image;
+        image.load(filename);
+        texture_.loadData(image.getPixels());
     }
 };
 
@@ -85,10 +84,8 @@ public:
     color_node() : node()
     {
         ofColor black{0, 0, 0, 0};
-        ofPixels pxs;
-        pxs.allocate(QUAD_WIDTH, QUAD_HEIGHT, OF_IMAGE_COLOR_ALPHA);
-	    pxs.setColor(black);
-        image_.setFromPixels(pxs);
+        pxs_.allocate(QUAD_WIDTH, QUAD_HEIGHT, OF_IMAGE_COLOR_ALPHA);
+	    pxs_.setColor(black);
 
         parameters_.add(r_.set("r", 0));
         parameters_.add(g_.set("g", 0));
@@ -97,9 +94,11 @@ public:
 
     void update()
     {
-        image::set_channel(image_.getPixels(), 0, r_.get());
-        image::set_channel(image_.getPixels(), 1, g_.get());
-        image::set_channel(image_.getPixels(), 2, b_.get());
+        image::set_channel(pxs_, 0, r_.get());
+        image::set_channel(pxs_, 1, g_.get());
+        image::set_channel(pxs_, 2, b_.get());
+
+        texture_.loadData(pxs_);
 
         node::update();
     }
@@ -108,6 +107,8 @@ private:
     ofParameter<size_t> r_;
     ofParameter<size_t> g_;
     ofParameter<size_t> b_;
+
+    ofPixels pxs_;
 };
 
 //-----------------------------------------------------------------------------
