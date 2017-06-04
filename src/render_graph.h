@@ -2,7 +2,9 @@
 
 #include <ofMain.h>
 
+#include <constants.h>
 #include <algorithms.h>
+
 
 namespace pipeline {
 
@@ -25,12 +27,14 @@ public:
     void draw()
     {
         if (active_)
-            image_.draw(0, 0);
+        {
+            ofSetColor(255, 255, 255, alpha_.get());
+            image_.getTexture().draw(0, 0);
+        }  
     }
 
     void alpha_changed(size_t& alpha)
     {
-        image::set_channel(image_.getPixels(), 3, alpha);
         active_ = alpha == 0 ? false : true;
     }
 
@@ -82,32 +86,22 @@ public:
     {
         ofColor black{0, 0, 0, 0};
         ofPixels pxs;
-        pxs.allocate(450, 300, OF_IMAGE_COLOR_ALPHA);
+        pxs.allocate(QUAD_WIDTH, QUAD_HEIGHT, OF_IMAGE_COLOR_ALPHA);
 	    pxs.setColor(black);
         image_.setFromPixels(pxs);
 
         parameters_.add(r_.set("r", 0));
         parameters_.add(g_.set("g", 0));
         parameters_.add(b_.set("b", 0));
-
-        r_.addListener(this, &color_node::r_changed);
-        g_.addListener(this, &color_node::g_changed);
-        b_.addListener(this, &color_node::b_changed);
     }
 
-    void r_changed(size_t& r)
+    void update()
     {
-        image::set_channel(image_.getPixels(), 0, r);
-    }
+        image::set_channel(image_.getPixels(), 0, r_.get());
+        image::set_channel(image_.getPixels(), 1, g_.get());
+        image::set_channel(image_.getPixels(), 2, b_.get());
 
-    void g_changed(size_t& g)
-    {
-        image::set_channel(image_.getPixels(), 1, g);
-    }
-
-    void b_changed(size_t& b)
-    {
-        image::set_channel(image_.getPixels(), 2, b);
+        node::update();
     }
 
 private:

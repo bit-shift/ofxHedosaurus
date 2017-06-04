@@ -1,5 +1,6 @@
 #include "SkinSource.h"
 
+#include <constants.h>
 #include <midi.h>
 #include <algorithms.h>
 
@@ -9,12 +10,12 @@ using namespace pipeline;
 
 SkinSource::SkinSource(midi::in& midi_in)
 	: midi_in_(midi_in)
-	, node0_(new file_node("assets/skin_tex_01_unsharpen.png"))
-	, node1_(new file_node("assets/skin_tex_02.png"))
+	, node0_(new file_node("assets/skin_tex_02.png"))
+	, node1_(new file_node("assets/skin_tex_03.png"))
 	, node2_(new color_node())
 {
 	name = "Skin";
-	allocate(450, 300);
+	allocate(QUAD_WIDTH, QUAD_HEIGHT);
 
 	graph_.add_input(node0_);
 	graph_.add_input(node1_);
