@@ -23,6 +23,8 @@ private:
 	pipeline::node_ptr node0_;
 	pipeline::node_ptr node1_;
 	pipeline::node_ptr node2_;
+	pipeline::node_ptr node3_;
+	pipeline::node_ptr node4_;
 	
 	pipeline::graph graph_;
 };

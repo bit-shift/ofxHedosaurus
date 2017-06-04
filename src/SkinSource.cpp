@@ -12,7 +12,9 @@ SkinSource::SkinSource(midi::in& midi_in)
 	: midi_in_(midi_in)
 	, node0_(new file_node("assets/skin_tex_02.png"))
 	, node1_(new file_node("assets/skin_tex_03.png"))
-	, node2_(new color_node())
+	, node2_(new file_node("assets/skin_tex_04.png"))
+	, node3_(new file_node("assets/skin_tex_05.png"))
+	, node4_(new file_node("assets/skin_tex_06.png"))
 {
 	name = "Skin";
 	allocate(QUAD_WIDTH, QUAD_HEIGHT);
@@ -20,6 +22,8 @@ SkinSource::SkinSource(midi::in& midi_in)
 	graph_.add_input(node0_);
 	graph_.add_input(node1_);
 	graph_.add_input(node2_);
+	graph_.add_input(node3_);
+	graph_.add_input(node4_);
 }
 
 //-----------------------------------------------------------------------------
@@ -39,17 +43,12 @@ void SkinSource::setup()
 		node2_->parameters().get<size_t>("alpha").set(value * 2);
 	}});
 
-	// Color node
-	midi_in_.add_trigger(midi::trigger_t{ 102, [this](const size_t value){ 
-		node2_->parameters().get<size_t>("r").set(value * 2);
+	midi_in_.add_trigger(midi::trigger_t{ 17, [this](const size_t value){ 
+		node3_->parameters().get<size_t>("alpha").set(value * 2);
 	}});
 
-	midi_in_.add_trigger(midi::trigger_t{ 105, [this](const size_t value){ 
-		node2_->parameters().get<size_t>("g").set(value * 2);
-	}});
-
-	midi_in_.add_trigger(midi::trigger_t{ 61, [this](const size_t value){ 
-		node2_->parameters().get<size_t>("b").set(value * 2);
+	midi_in_.add_trigger(midi::trigger_t{ 25, [this](const size_t value){ 
+		node4_->parameters().get<size_t>("alpha").set(value * 2);
 	}});
 }
 
