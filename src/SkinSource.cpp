@@ -34,13 +34,15 @@ SkinSource::SkinSource(midi::in& midi_in)
 	graph_.add_input(node6_);
 	graph_.add_input(node7_);
 
-	modulation_fn fn = [](ofParameter<size_t>& param) {
+	modulation mod2{node2_};
+
+	modulator mod_fn2 {"alpha", [](ofParameter<size_t>& param) {
 		auto value = param.get();
         value = value == 255 ? 0 : 255;
         param.set(value);
-	};
-	modulation mod2{node2_, std::move(fn)};
-	
+	}};
+	mod2.add_modulator(std::move(mod_fn2));	
+
 	sequencer_.add_modulation(std::move(mod2));
 }
 
@@ -49,58 +51,58 @@ SkinSource::SkinSource(midi::in& midi_in)
 void SkinSource::setup()
 {
 	// ALPHA
-	midi_in_.add_trigger(midi::trigger{ 9, 0, 117, 
+	midi_in_.add_trigger(midi::trigger{9, 0, 117, 
 	[this](const size_t value) {
 		node0_->parameters().get<size_t>("alpha").set(value * 2);
 	}});
 
-	midi_in_.add_trigger(midi::trigger{ 9, 0, 118, 
+	midi_in_.add_trigger(midi::trigger{9, 0, 118, 
 	[this](const size_t value) { 
 		node1_->parameters().get<size_t>("alpha").set(value * 2);
 	}});
 
-	midi_in_.add_trigger(midi::trigger{ 9, 0, 14, 
+	midi_in_.add_trigger(midi::trigger{9, 0, 14, 
 	[this](const size_t value) { 
 		node2_->parameters().get<size_t>("alpha").set(value * 2);
 	}});
 
-	midi_in_.add_trigger(midi::trigger{ 9, 0, 17, 
+	midi_in_.add_trigger(midi::trigger{9, 0, 17, 
 	[this](const size_t value){ 
 		node3_->parameters().get<size_t>("alpha").set(value * 2);
 	}});
 
-	midi_in_.add_trigger(midi::trigger{ 9, 0, 25, 
+	midi_in_.add_trigger(midi::trigger{9, 0, 25, 
 	[this](const size_t value){ 
 		node4_->parameters().get<size_t>("alpha").set(value * 2);
 	}});
 
-	midi_in_.add_trigger(midi::trigger{ 9, 0, 30, 
+	midi_in_.add_trigger(midi::trigger{9, 0, 30, 
 	[this](const size_t value){ 
 		node5_->parameters().get<size_t>("alpha").set(value * 2);
 	}});
 
-	midi_in_.add_trigger(midi::trigger{ 9, 0, 48, 
+	midi_in_.add_trigger(midi::trigger{9, 0, 48, 
 	[this](const size_t value){ 
 		node6_->parameters().get<size_t>("alpha").set(value * 2);
 	}});
 
-	midi_in_.add_trigger(midi::trigger{ 9, 0, 53, 
+	midi_in_.add_trigger(midi::trigger{9, 0, 53, 
 	[this](const size_t value){ 
 		node7_->parameters().get<size_t>("alpha").set(value * 2);
 	}});
 
 	// BPM
-	midi_in_.add_trigger(midi::trigger{ 9, 0, 58, 
+	midi_in_.add_trigger(midi::trigger{9, 0, 58, 
 	[this](const size_t value){ 
 		sequencer_.parameters().get<size_t>("bpm").set(value * 2);
 	}});
 
 	// TRANSPORT
-	midi_in_.add_trigger(midi::trigger{ 1, 10, 0, 
+	midi_in_.add_trigger(midi::trigger{1, 10, 0, 
 	[this](const size_t value){ 
 		sequencer_.parameters().get<size_t>("running").set(false);
 	}});
-	midi_in_.add_trigger(midi::trigger{ 1, 11, 0, 
+	midi_in_.add_trigger(midi::trigger{1, 11, 0, 
 	[this](const size_t value){ 
 		sequencer_.parameters().get<size_t>("running").set(true);
 	}});

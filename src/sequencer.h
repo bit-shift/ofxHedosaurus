@@ -23,18 +23,35 @@ inline size_t bpm_to_interval_ms(const size_t bpm)
 
 using modulation_fn = std::function<void(ofParameter<size_t>&)>;
 
+struct modulator {
+    modulator(const std::string name, modulation_fn fn) : name_(name), fn_(fn) {}
+
+    std::string name_;
+    modulation_fn fn_;
+};
+
+//-----------------------------------------------------------------------------
+
 class modulation {
 public:
-    modulation(node_ptr node, modulation_fn fn) : node_(node), fn_(fn) {}
+    modulation(node_ptr node) : node_(node) {}
 
     void step()
     {
-        fn_(node_->parameters().get<size_t>("alpha"));
+        for (auto& modulator: modulators_)
+        {
+            modulator.fn_(node_->parameters().get<size_t>(modulator.name_));
+        }
+    }
+
+    void add_modulator(modulator modulator)
+    {
+        modulators_.push_back(modulator);
     }
 
 private:
     node_ptr node_;
-    modulation_fn fn_;
+    std::vector<modulator> modulators_;
 };
 
 //-----------------------------------------------------------------------------
