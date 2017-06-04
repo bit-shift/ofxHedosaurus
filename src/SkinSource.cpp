@@ -6,7 +6,7 @@
 
 //-----------------------------------------------------------------------------
 
-using namespace pipeline;
+using namespace engine;
 
 SkinSource::SkinSource(midi::in& midi_in)
 	: midi_in_(midi_in)

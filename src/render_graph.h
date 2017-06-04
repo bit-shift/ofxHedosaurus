@@ -6,7 +6,7 @@
 #include <algorithms.h>
 
 
-namespace pipeline {
+namespace engine {
 
 //-----------------------------------------------------------------------------
 
@@ -144,4 +144,4 @@ private:
     vector<node_ptr> nodes_;
 };
 
-} // pipeline
+} // engine

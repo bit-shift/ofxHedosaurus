@@ -20,14 +20,14 @@ public:
 private:
 	midi::in& midi_in_;
 
-	pipeline::node_ptr node0_;
-	pipeline::node_ptr node1_;
-	pipeline::node_ptr node2_;
-	pipeline::node_ptr node3_;
-	pipeline::node_ptr node4_;
-	pipeline::node_ptr node5_;
-	pipeline::node_ptr node6_;
-	pipeline::node_ptr node7_;
+	engine::node_ptr node0_;
+	engine::node_ptr node1_;
+	engine::node_ptr node2_;
+	engine::node_ptr node3_;
+	engine::node_ptr node4_;
+	engine::node_ptr node5_;
+	engine::node_ptr node6_;
+	engine::node_ptr node7_;
 	
-	pipeline::graph graph_;
+	engine::graph graph_;
 };
