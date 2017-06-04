@@ -21,19 +21,20 @@ inline size_t bpm_to_interval_ms(const size_t bpm)
 
 //-----------------------------------------------------------------------------
 
+using modulation_fn = std::function<void(ofParameter<size_t>&)>;
+
 class modulation {
 public:
-    modulation(node_ptr node) : node_(node) {}
+    modulation(node_ptr node, modulation_fn fn) : node_(node), fn_(fn) {}
 
     void step()
     {
-        auto value = node_->parameters().get<size_t>("alpha").get();
-        value = value == 255 ? 0 : 255;
-        node_->parameters().get<size_t>("alpha").set(value);
+        fn_(node_->parameters().get<size_t>("alpha"));
     }
 
 private:
     node_ptr node_;
+    modulation_fn fn_;
 };
 
 //-----------------------------------------------------------------------------

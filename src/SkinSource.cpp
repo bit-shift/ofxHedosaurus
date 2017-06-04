@@ -34,7 +34,13 @@ SkinSource::SkinSource(midi::in& midi_in)
 	graph_.add_input(node6_);
 	graph_.add_input(node7_);
 
-	modulation mod2{node2_};
+	modulation_fn fn = [](ofParameter<size_t>& param) {
+		auto value = param.get();
+        value = value == 255 ? 0 : 255;
+        param.set(value);
+	};
+	modulation mod2{node2_, std::move(fn)};
+	
 	sequencer_.add_modulation(std::move(mod2));
 }
 
