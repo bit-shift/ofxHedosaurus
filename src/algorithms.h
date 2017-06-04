@@ -17,8 +17,4 @@ inline void set_channel(ofPixels& pixels, const size_t channel,
 	}
 }
 
-// ----------------------------------------------------------------------------
-
 } // image
-
-

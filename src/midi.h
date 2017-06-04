@@ -3,11 +3,16 @@
 #include "ofMain.h"
 #include "ofxMidi.h"
 
+#include <boost/optional.hpp>
+
 namespace midi {
+
+//-----------------------------------------------------------------------------
 
 inline void log_message(const ofxMidiMessage& message)
 {
-    ofLogNotice("midi", "Received: " + ofxMidiMessage::getStatusString(message.status));
+    ofLogNotice("midi", "Received: " + 
+                    ofxMidiMessage::getStatusString(message.status));
 	ofLogNotice("midi", "channel: " + to_string(message.channel));
 	ofLogNotice("midi", "pitch: " + to_string(message.pitch));
 	ofLogNotice("midi", "velocity: " + to_string(message.velocity));	
@@ -16,10 +21,16 @@ inline void log_message(const ofxMidiMessage& message)
 	ofLogNotice("midi", "dtime: " + to_string(message.deltatime));
 }
 
-struct trigger_t {
+//-----------------------------------------------------------------------------
+
+struct trigger {
+    size_t channel_;
+    size_t pitch_;
     size_t control_;
     std::function<void(const size_t value)> fn_;
 };
+
+//-----------------------------------------------------------------------------
 
 class in : public ofxMidiListener {
 public:
@@ -51,13 +62,17 @@ public:
 	    in_.removeListener(this);
     }
 
-    void newMidiMessage(ofxMidiMessage& event) 
+    void newMidiMessage(ofxMidiMessage& event)
     { 
         msg_ = event;
         for(const auto& trigger: trigger_)
         {
-            if (trigger.control_ == msg_.control)
+            if (trigger.channel_ == msg_.channel &&
+                trigger.pitch_ == msg_.pitch &&
+                trigger.control_ == msg_.control)
+            {
                 trigger.fn_(msg_.value);
+            }                
         }
     }
 
@@ -66,7 +81,7 @@ public:
         return msg_;
     }
 
-    void add_trigger(const trigger_t& trigger)
+    void add_trigger(const trigger& trigger)
     {
         trigger_.push_back(trigger);
     }
@@ -74,7 +89,7 @@ public:
 private:
     ofxMidiIn in_;
     ofxMidiMessage msg_;
-    vector<trigger_t> trigger_;
+    vector<trigger> trigger_;
 };
 
 } // midi

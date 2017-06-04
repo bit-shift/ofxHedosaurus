@@ -1,12 +1,13 @@
 #pragma once
 
-#include "midi.h"
+#include <midi.h>
+#include <sequencer.h>
 #include <render_graph.h>
 
-#include "ofMain.h"
-#include "FboSource.h"
+#include <FboSource.h>
 
-#include "ofxCvColorImage.h"
+#include <ofxCvColorImage.h>
+#include <ofMain.h>
 
 class SkinSource : public ofx::piMapper::FboSource {
 
@@ -30,4 +31,5 @@ private:
 	engine::node_ptr node7_;
 	
 	engine::graph graph_;
+	engine::sequencer sequencer_;
 };
