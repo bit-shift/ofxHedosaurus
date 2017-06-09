@@ -1,6 +1,8 @@
 #pragma once
 
 #include "midi.h"
+#include "sequencer.h"
+#include "render_graph.h"
 
 #include "ofMain.h"
 #include "Settings.h"
@@ -10,6 +12,8 @@
 
 class ofApp : public ofBaseApp {
 	public:
+		ofApp() : ofBaseApp(), midi_in_(mapping_) {}
+
 		void setup();
 		void update();
 		void draw();
@@ -23,8 +27,15 @@ class ofApp : public ofBaseApp {
 		void mouseDragged(int x, int y, int button);
 
 		ofxPiMapper piMapper;
-		
-		midi::in midi_in_;
 
-		SkinSource * _skinSource;
+		midi::mapping mapping_;
+		midi::in midi_in_;
+		
+		engine::sequencer sequencer_;
+
+		std::shared_ptr<SkinSource> skin_source_;
+
+private:
+	void register_midi_trigger();
+	void setup_modulations();
 };

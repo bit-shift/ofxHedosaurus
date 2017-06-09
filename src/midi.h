@@ -1,5 +1,7 @@
 #pragma once
 
+#include "FboSource.h"
+
 #include "ofMain.h"
 #include "ofxMidi.h"
 
@@ -22,12 +24,43 @@ inline void log_message(const ofxMidiMessage& message)
 }
 
 //-----------------------------------------------------------------------------
+using FboSource = ofx::piMapper::FboSource;
 
 struct trigger {
     size_t channel_;
-    size_t pitch_;
     size_t control_;
-    std::function<void(const size_t value)> fn_;
+    size_t pitch_;
+    std::function<void(FboSource& source, const size_t value)> fn_;
+};
+
+class mapping {
+public:
+    void select_source()
+    {
+
+    }
+
+    void on_event(ofxMidiMessage& event)
+    {
+        for(const auto& trigger: triggers_)
+        {
+            if (trigger.channel_ == event.channel &&
+                trigger.control_ == event.control &&
+                trigger.pitch_ == event.pitch)
+            {
+                trigger.fn_(*source_.get(), event.value);
+            }                
+        }
+    }
+
+    void add_trigger(const trigger& trigger)
+    {
+        triggers_.push_back(trigger);
+    }
+
+private:
+    std::shared_ptr<FboSource> source_;
+    vector<trigger> triggers_;
 };
 
 //-----------------------------------------------------------------------------
@@ -35,7 +68,7 @@ struct trigger {
 class in : public ofxMidiListener {
 public:
 
-    in()
+    in(mapping& mapping) : mapping_(mapping)
     {
         in_.listPorts(); // via instance
         //ofxMidiIn::listPorts(); // via static as well
@@ -65,15 +98,7 @@ public:
     void newMidiMessage(ofxMidiMessage& event)
     { 
         msg_ = event;
-        for(const auto& trigger: trigger_)
-        {
-            if (trigger.channel_ == msg_.channel &&
-                trigger.pitch_ == msg_.pitch &&
-                trigger.control_ == msg_.control)
-            {
-                trigger.fn_(msg_.value);
-            }                
-        }
+        mapping_.on_event(event);
     }
 
     const ofxMidiMessage& message() const
@@ -81,15 +106,10 @@ public:
         return msg_;
     }
 
-    void add_trigger(const trigger& trigger)
-    {
-        trigger_.push_back(trigger);
-    }
-
 private:
     ofxMidiIn in_;
     ofxMidiMessage msg_;
-    vector<trigger> trigger_;
+    mapping mapping_;
 };
 
 } // midi

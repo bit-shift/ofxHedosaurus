@@ -3,9 +3,13 @@
 #include <constants.h>
 #include <render_graph.h>
 
+#include "FboSource.h"
+
 #include <ofMain.h>
 
 namespace engine {
+
+using FboSource = ofx::piMapper::FboSource;
 
 // ----------------------------------------------------------------------------
 
@@ -84,14 +88,14 @@ public:
     {
         if (running_.get())
         {
-            for (auto& modulation: modulations_)
-                modulation.step();
+            for (auto source: sources_)
+                source->modulate();
         }
     }
 
-    void add_modulation(modulation modulation)
+    void add_source(std::shared_ptr<FboSource> source)
     {
-        modulations_.push_back(modulation);
+        sources_.push_back(source);
     }
 
     ofParameterGroup& parameters() { return parameters_; }
@@ -104,7 +108,7 @@ private:
     ofParameter<size_t> bpm_;
     ofParameter<bool> running_;
 
-    std::vector<modulation> modulations_;
+    std::vector<std::shared_ptr<FboSource>> sources_;
 };
 
 } // engine

@@ -15,6 +15,8 @@ public:
     node()
     {
         parameters_.add(alpha_.set("alpha", 0));
+        parameters_.add(y_.set("y", 0));
+        
         alpha_.addListener(this, &node::alpha_changed);
     }
 
@@ -26,8 +28,11 @@ public:
     {
         if (active_)
         {
+            const int offset = - QUAD_HEIGHT + y_.get();
             ofSetColor(255, 255, 255, alpha_.get());
-            texture_.draw(0, 0);
+            texture_.draw(-20 + y_.get(), -20 + (y_.get() / 6));
+            // texture2_.draw(0, offset);
+            // texture2_.draw(0, offset - 153);
         }  
     }
 
@@ -42,9 +47,12 @@ protected:
     bool active_ = true;
     
     ofTexture texture_;
+    ofTexture texture2_;
 
     ofParameterGroup parameters_;
     ofParameter<size_t> alpha_;
+    ofParameter<int> x_;
+    ofParameter<int> y_;
 };
 
 //-----------------------------------------------------------------------------
@@ -72,6 +80,9 @@ public:
         ofImage image;
         image.load(filename);
         texture_.loadData(image.getPixels());
+        
+        image.rotate90(2);
+        texture2_.loadData(image.getPixels());
     }
 };
 

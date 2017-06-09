@@ -12,15 +12,17 @@
 class SkinSource : public ofx::piMapper::FboSource {
 
 public:
-	SkinSource(midi::in& midi_in);
+	SkinSource();
 
 	void setup();
 	void update();
 	void draw();
 
-private:
-	midi::in& midi_in_;
+	void set_param(const size_t& node_idx, 
+				   const std::string& name, const size_t& value);
+	void modulate();
 
+private:
 	engine::node_ptr node0_;
 	engine::node_ptr node1_;
 	engine::node_ptr node2_;
@@ -29,7 +31,9 @@ private:
 	engine::node_ptr node5_;
 	engine::node_ptr node6_;
 	engine::node_ptr node7_;
-	
+
+	std::vector<engine::node_ptr> nodes_;
+
 	engine::graph graph_;
-	engine::sequencer sequencer_;
+	std::vector<engine::modulation> modulations_;
 };
