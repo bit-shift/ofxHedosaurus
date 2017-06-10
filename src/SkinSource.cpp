@@ -58,6 +58,8 @@ SkinSource::SkinSource(const std::string source_name,
 	}};
 	mod2.add_modulator(std::move(mod_fn2));
 	modulations_.push_back(std::move(mod2));
+
+	parameters_.add(alpha_.set("alpha", 0));
 }
 
 //-----------------------------------------------------------------------------
@@ -78,7 +80,7 @@ void SkinSource::update()
 void SkinSource::draw()
 {
 	ofBackground(0); // this matters
-	// ofSetColor(255, 255, 255, alpha_.get());
+	ofSetColor(255, 255, 255, alpha_.get());
 	ofEnableBlendMode(OF_BLENDMODE_ADD);
 	
 	// reduce visual strength / impact
@@ -92,7 +94,6 @@ void SkinSource::draw()
 void SkinSource::set_param(const size_t& node_idx,
 			   const std::string& name, const size_t& value)
 {
-	ofLogNotice("SkinSource::set_param()", name);
 	nodes_.at(node_idx)->parameters().get<size_t>(name).set(value * 2);
 }
 
