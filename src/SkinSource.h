@@ -12,7 +12,7 @@
 class SkinSource : public ofx::piMapper::FboSource {
 
 public:
-	SkinSource(const std::string name);
+	SkinSource(const std::string name, const std::vector<std::string>& filenames);
 
 	void setup();
 	void update();

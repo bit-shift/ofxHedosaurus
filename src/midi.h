@@ -42,25 +42,28 @@ public:
 
     void on_event(ofxMidiMessage& event)
     {
-        for(const auto& trigger: triggers_)
+        for (const auto& trigger: triggers_)
         {
             if (trigger.channel_ == event.channel &&
                 trigger.control_ == event.control &&
                 trigger.pitch_ == event.pitch)
             {
-                trigger.fn_(*source_.get(), event.value);
+                if (source_)
+                {
+                    trigger.fn_(*source_.get(), event.value);
+                }                
             }                
         }
     }
 
-    void add_trigger(const trigger& trigger)
+    void add_trigger(trigger trigger)
     {
         triggers_.push_back(trigger);
     }
 
 private:
     std::shared_ptr<FboSource> source_;
-    vector<trigger> triggers_;
+    std::vector<trigger> triggers_;
 };
 
 //-----------------------------------------------------------------------------
@@ -85,7 +88,7 @@ public:
         // add ofApp as a listener
         in_.addListener(this);
         
-        // print received messages to the console
+        // print received messages to thchannele console
         in_.setVerbose(true);
     }
 
@@ -109,7 +112,7 @@ public:
 private:
     ofxMidiIn in_;
     ofxMidiMessage msg_;
-    mapping mapping_;
+    mapping& mapping_;
 };
 
 } // midi

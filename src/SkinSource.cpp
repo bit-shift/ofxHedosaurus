@@ -10,16 +10,17 @@
 
 using namespace engine;
 
-SkinSource::SkinSource(const std::string source_name)
+SkinSource::SkinSource(const std::string source_name,
+					   const std::vector<std::string>& filenames)
 	: FboSource()
-	, node0_(new file_node("assets/skin_tex_00.png"))
-	, node1_(new file_node("assets/skin_tex_01.png"))
-	, node2_(new file_node("assets/skin_tex_02.png"))
-	, node3_(new file_node("assets/skin_tex_03.png"))
-	, node4_(new file_node("assets/skin_tex_04.png"))
-	, node5_(new file_node("assets/skin_tex_05.png"))
-	, node6_(new file_node("assets/skin_tex_06.png"))
-	, node7_(new file_node("assets/skin_tex_07.png"))
+	, node0_(new file_node(filenames.at(0)))
+	, node1_(new file_node(filenames.at(1)))
+	, node2_(new file_node(filenames.at(2)))
+	, node3_(new file_node(filenames.at(3)))
+	, node4_(new file_node(filenames.at(4)))
+	, node5_(new file_node(filenames.at(5)))
+	, node6_(new file_node(filenames.at(6)))
+	, node7_(new file_node(filenames.at(7)))
 
 {
 	name = source_name;
@@ -77,7 +78,7 @@ void SkinSource::update()
 void SkinSource::draw()
 {
 	ofBackground(0); // this matters
-	ofSetColor(255, 255, 255, alpha_.get());
+	// ofSetColor(255, 255, 255, alpha_.get());
 	ofEnableBlendMode(OF_BLENDMODE_ADD);
 	
 	// reduce visual strength / impact
@@ -91,6 +92,7 @@ void SkinSource::draw()
 void SkinSource::set_param(const size_t& node_idx,
 			   const std::string& name, const size_t& value)
 {
+	ofLogNotice("SkinSource::set_param()", name);
 	nodes_.at(node_idx)->parameters().get<size_t>(name).set(value * 2);
 }
 

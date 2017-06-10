@@ -10,17 +10,28 @@ void ofApp::setup(){
 	ofx::piMapper::VideoSource::enableAudio = true;
 	ofx::piMapper::VideoSource::useHDMIForAudio = false;
 
+	std::vector<std::string> filenames = {
+		"assets/skin_tex_00.png",
+		"assets/skin_tex_01.png",
+		"assets/skin_tex_02.png",
+		"assets/skin_tex_03.png",
+		"assets/skin_tex_04.png",
+		"assets/skin_tex_05.png",
+		"assets/skin_tex_06.png",
+		"assets/skin_tex_07.png"
+	};
+
 	// Add our CustomSource to list of fbo sources of the piMapper
 	// FBO sources should be added before piMapper.setup() so the
 	// piMapper is able to load the source if it is assigned to
 	// a surface in XML settings.
-	head_source_.reset(new SkinSource("Head"));
-	neck_source_.reset(new SkinSource("Neck"));
-	body_source_.reset(new SkinSource("Body"));
-	fin_source_.reset(new SkinSource("Fins"));
-	leg_front_source_.reset(new SkinSource("Leg Front"));
-	leg_back_source_.reset(new SkinSource("Leg Back"));
-	tail_source_.reset(new SkinSource("Tail"));
+	head_source_.reset(new SkinSource("Head", filenames));
+	neck_source_.reset(new SkinSource("Neck", filenames));
+	body_source_.reset(new SkinSource("Body", filenames));
+	fin_source_.reset(new SkinSource("Fins", filenames));
+	leg_front_source_.reset(new SkinSource("Leg Front", filenames));
+	leg_back_source_.reset(new SkinSource("Leg Back", filenames));
+	tail_source_.reset(new SkinSource("Tail", filenames));
 
 	sequencer_.add_source(head_source_);
 	sequencer_.add_source(neck_source_);
@@ -39,11 +50,15 @@ void ofApp::setup(){
 	piMapper.registerFboSource(tail_source_.get());
 	piMapper.setup();
 
+	mapping_.select_source(head_source_);
+
 	// The info layer is hidden by default, press <i> to toggle
 	// piMapper.showInfo();
 	
 	ofSetFullscreen(Settings::instance()->getFullscreen());
 	ofSetEscapeQuitsApp(false);
+
+	register_midi_trigger();
 }
 
 void ofApp::update(){
@@ -107,42 +122,42 @@ void ofApp::register_midi_trigger()
 	//
 	// ALPHA
 	//
-	mapping_.add_trigger(midi::trigger{1, 48, 0,
+	mapping_.add_trigger(std::move(midi::trigger{1, 48, 0,
 	[](Source& source, const size_t value) {
 		source.set_param(0, "alpha", value);
-	}});
+	}}));
 
 	mapping_.add_trigger(midi::trigger{1, 49, 0,
 	[](Source& source, const size_t value) {
 		source.set_param(1, "alpha", value);
 	}});
 
-	mapping_.add_trigger(midi::trigger{1, 7, 0,
+	mapping_.add_trigger(midi::trigger{1, 50, 0,
 	[](Source& source, const size_t value) {
 		source.set_param(2, "alpha", value);
 	}});
 
-	mapping_.add_trigger(midi::trigger{1, 7, 0,
+	mapping_.add_trigger(midi::trigger{1, 51, 0,
 	[](Source& source, const size_t value){
 		source.set_param(3, "alpha", value);
 	}});
 
-	mapping_.add_trigger(midi::trigger{1, 7, 0,
+	mapping_.add_trigger(midi::trigger{1, 52, 0,
 	[](Source& source, const size_t value){ 
 		source.set_param(4, "alpha", value);
 	}});
 
-	mapping_.add_trigger(midi::trigger{1, 7, 0,
+	mapping_.add_trigger(midi::trigger{1, 53, 0,
 	[](Source& source, const size_t value){ 
 		source.set_param(5, "alpha", value);
 	}});
 
-	mapping_.add_trigger(midi::trigger{1, 7, 0,
+	mapping_.add_trigger(midi::trigger{1, 54, 0,
 	[](Source& source, const size_t value){ 
 		source.set_param(6, "alpha", value);
 	}});
 
-	mapping_.add_trigger(midi::trigger{1, 7, 0,
+	mapping_.add_trigger(midi::trigger{1, 55, 0,
 	[](Source& source, const size_t value){ 
 		source.set_param(7, "alpha", value);
 	}});
@@ -150,34 +165,39 @@ void ofApp::register_midi_trigger()
 	//
 	// SOURCE SELECTION
 	//
-	mapping_.add_trigger(midi::trigger{1, 0, 0,
-	[this](Source& source, const size_t value){ 
-		// head
+	mapping_.add_trigger(midi::trigger{1, 0, 52,
+	[this](Source& source, const size_t value){
+		mapping_.select_source(head_source_);
 	}});
 
-	mapping_.add_trigger(midi::trigger{1, 0, 0,
-	[this](Source& source, const size_t value){ 
-		// neck
+	mapping_.add_trigger(midi::trigger{2, 0, 52,
+	[this](Source& source, const size_t value){
+		mapping_.select_source(neck_source_);
 	}});
 
-	mapping_.add_trigger(midi::trigger{1, 0, 0,
+	mapping_.add_trigger(midi::trigger{3, 0, 52,
 	[this](Source& source, const size_t value){ 
-		// body
+		mapping_.select_source(body_source_);
 	}});
 
-	mapping_.add_trigger(midi::trigger{1, 0, 0,
+	mapping_.add_trigger(midi::trigger{4, 0, 52,
 	[this](Source& source, const size_t value){ 
-		// fins
+		mapping_.select_source(fin_source_);
 	}});
 
-	mapping_.add_trigger(midi::trigger{1, 0, 0,
+	mapping_.add_trigger(midi::trigger{5, 0, 52,
 	[this](Source& source, const size_t value){ 
-		// feet
+		mapping_.select_source(leg_front_source_);
 	}});
 
-	mapping_.add_trigger(midi::trigger{1, 0, 0,
+	mapping_.add_trigger(midi::trigger{6, 0, 52,
 	[this](Source& source, const size_t value){ 
-		// tail
+		mapping_.select_source(leg_back_source_);
+	}});
+
+	mapping_.add_trigger(midi::trigger{7, 0, 52,
+	[this](Source& source, const size_t value){ 
+		mapping_.select_source(tail_source_);
 	}});
 
 	//
