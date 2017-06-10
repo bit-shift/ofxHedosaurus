@@ -10,8 +10,9 @@
 
 using namespace engine;
 
-SkinSource::SkinSource()
-	: node0_(new file_node("assets/skin_tex_00.png"))
+SkinSource::SkinSource(const std::string source_name)
+	: FboSource()
+	, node0_(new file_node("assets/skin_tex_00.png"))
 	, node1_(new file_node("assets/skin_tex_01.png"))
 	, node2_(new file_node("assets/skin_tex_02.png"))
 	, node3_(new file_node("assets/skin_tex_03.png"))
@@ -21,7 +22,7 @@ SkinSource::SkinSource()
 	, node7_(new file_node("assets/skin_tex_07.png"))
 
 {
-	name = "Skin";
+	name = source_name;
 	allocate(QUAD_WIDTH, QUAD_HEIGHT);
 
 	graph_.add_input(node0_);
@@ -76,9 +77,10 @@ void SkinSource::update()
 void SkinSource::draw()
 {
 	ofBackground(0); // this matters
+	ofSetColor(255, 255, 255, alpha_.get());
 	ofEnableBlendMode(OF_BLENDMODE_ADD);
 	
-	// reduce visualstd::vector<modulation> modulations_; strength / impact
+	// reduce visual strength / impact
 	// ofSetColor(255, 255, 255, 150);
 
 	graph_.draw();

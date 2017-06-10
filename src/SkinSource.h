@@ -12,15 +12,17 @@
 class SkinSource : public ofx::piMapper::FboSource {
 
 public:
-	SkinSource();
+	SkinSource(const std::string name);
 
 	void setup();
 	void update();
 	void draw();
 
-	void set_param(const size_t& node_idx, 
+	void set_param(const size_t& node_idx,
 				   const std::string& name, const size_t& value);
 	void modulate();
+
+	ofParameterGroup& parameters() { return parameters_; }
 
 private:
 	engine::node_ptr node0_;
@@ -36,4 +38,7 @@ private:
 
 	engine::graph graph_;
 	std::vector<engine::modulation> modulations_;
+
+	ofParameterGroup parameters_;
+    ofParameter<size_t> alpha_;
 };

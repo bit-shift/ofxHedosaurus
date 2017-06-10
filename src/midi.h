@@ -35,9 +35,9 @@ struct trigger {
 
 class mapping {
 public:
-    void select_source()
+    void select_source(std::shared_ptr<FboSource> source)
     {
-
+        source_ = source;
     }
 
     void on_event(ofxMidiMessage& event)
