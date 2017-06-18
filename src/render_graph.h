@@ -30,7 +30,9 @@ public:
         {
             const int offset = - QUAD_HEIGHT + y_.get();
             ofSetColor(255, 255, 255, alpha_.get());
-            texture_.draw(-20 + y_.get(), -20 + (y_.get() / 6));
+            // texture_.draw(-20 + y_.get(), -20 + (y_.get() / 6));
+            texture2_.draw(0, 0);
+            // frank: 0175 8808861
             // texture2_.draw(0, offset);
             // texture2_.draw(0, offset - 153);
         }  

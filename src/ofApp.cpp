@@ -38,7 +38,7 @@ void ofApp::setup(){
 	sequencer_.add_source(body_source_);
 	sequencer_.add_source(fin_source_);
 	sequencer_.add_source(leg_front_source_);
-	sequencer_.add_source(leg_back_source_);
+	sequencer_.add_source(leg_bacsk_source_);
 	sequencer_.add_source(tail_source_);
 
 	piMapper.registerFboSource(head_source_.get());
