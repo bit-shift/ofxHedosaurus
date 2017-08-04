@@ -38,7 +38,7 @@ void ofApp::setup(){
 	sequencer_.add_source(body_source_);
 	sequencer_.add_source(fin_source_);
 	sequencer_.add_source(leg_front_source_);
-	sequencer_.add_source(leg_bacsk_source_);
+	sequencer_.add_source(leg_back_source_);
 	sequencer_.add_source(tail_source_);
 
 	piMapper.registerFboSource(head_source_.get());
@@ -54,7 +54,7 @@ void ofApp::setup(){
 
 	// The info layer is hidden by default, press <i> to toggle
 	// piMapper.showInfo();
-	
+
 	ofSetFullscreen(Settings::instance()->getFullscreen());
 	ofSetEscapeQuitsApp(false);
 
@@ -103,7 +103,7 @@ void ofApp::register_midi_trigger()
 	// BPM
 	//
 	mapping_.add_trigger(midi::trigger{1, 14, 0,
-	[this](Source& source, const size_t value){ 
+	[this](Source& source, const size_t value){
 		sequencer_.parameters().get<size_t>("bpm").set(value * 2);
 	}});
 
@@ -111,11 +111,11 @@ void ofApp::register_midi_trigger()
 	// TRANSPORT
 	//
 	mapping_.add_trigger(midi::trigger{1, 0, 91,
-	[this](Source& source, const size_t value){ 
+	[this](Source& source, const size_t value){
 		sequencer_.parameters().get<size_t>("running").set(true);
 	}});
 	mapping_.add_trigger(midi::trigger{1, 0, 92,
-	[this](Source& source, const size_t value){ 
+	[this](Source& source, const size_t value){
 		sequencer_.parameters().get<size_t>("running").set(false);
 	}});
 
@@ -143,22 +143,22 @@ void ofApp::register_midi_trigger()
 	}});
 
 	mapping_.add_trigger(midi::trigger{1, 52, 0,
-	[](Source& source, const size_t value){ 
+	[](Source& source, const size_t value){
 		source.set_param(4, "alpha", value);
 	}});
 
 	mapping_.add_trigger(midi::trigger{1, 53, 0,
-	[](Source& source, const size_t value){ 
+	[](Source& source, const size_t value){
 		source.set_param(5, "alpha", value);
 	}});
 
 	mapping_.add_trigger(midi::trigger{1, 54, 0,
-	[](Source& source, const size_t value){ 
+	[](Source& source, const size_t value){
 		source.set_param(6, "alpha", value);
 	}});
 
 	mapping_.add_trigger(midi::trigger{1, 55, 0,
-	[](Source& source, const size_t value){ 
+	[](Source& source, const size_t value){
 		source.set_param(7, "alpha", value);
 	}});
 
@@ -176,27 +176,27 @@ void ofApp::register_midi_trigger()
 	}});
 
 	mapping_.add_trigger(midi::trigger{3, 0, 52,
-	[this](Source& source, const size_t value){ 
+	[this](Source& source, const size_t value){
 		mapping_.select_source(body_source_);
 	}});
 
 	mapping_.add_trigger(midi::trigger{4, 0, 52,
-	[this](Source& source, const size_t value){ 
+	[this](Source& source, const size_t value){
 		mapping_.select_source(fin_source_);
 	}});
 
 	mapping_.add_trigger(midi::trigger{5, 0, 52,
-	[this](Source& source, const size_t value){ 
+	[this](Source& source, const size_t value){
 		mapping_.select_source(leg_front_source_);
 	}});
 
 	mapping_.add_trigger(midi::trigger{6, 0, 52,
-	[this](Source& source, const size_t value){ 
+	[this](Source& source, const size_t value){
 		mapping_.select_source(leg_back_source_);
 	}});
 
 	mapping_.add_trigger(midi::trigger{7, 0, 52,
-	[this](Source& source, const size_t value){ 
+	[this](Source& source, const size_t value){
 		mapping_.select_source(tail_source_);
 	}});
 
@@ -224,22 +224,22 @@ void ofApp::register_midi_trigger()
 	}});
 
 	mapping_.add_trigger(midi::trigger{5, 7, 0,
-	[this](Source& source, const size_t value){ 
+	[this](Source& source, const size_t value){
 		leg_front_source_->parameters().get<size_t>("alpha").set(value * 2);
 	}});
 
 	mapping_.add_trigger(midi::trigger{6, 7, 0,
-	[this](Source& source, const size_t value){ 
+	[this](Source& source, const size_t value){
 		leg_back_source_->parameters().get<size_t>("alpha").set(value * 2);
 	}});
 
 	mapping_.add_trigger(midi::trigger{7, 7, 0,
-	[this](Source& source, const size_t value){ 
+	[this](Source& source, const size_t value){
 		tail_source_->parameters().get<size_t>("alpha").set(value * 2);
 	}});
 
-	// midi_in_.add_trigger(midi::trigger{8, 7, 0,FboSource& source, 
-	// [this](FboSource& source, const size_t value){ 
+	// midi_in_.add_trigger(midi::trigger{8, 7, 0,FboSource& source,
+	// [this](FboSource& source, const size_t value){
 	// 	node7_->parameters().get<size_t>("alpha").set(value * 2);
 	// }});
 }
