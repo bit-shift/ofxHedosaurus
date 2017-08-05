@@ -18,8 +18,8 @@ public:
 	void update();
 	void draw();
 
-	void set_param(const size_t& node_idx,
-				   const std::string& name, const size_t& value);
+	auto nodes() -> std::vector<engine::node_ptr>& { return nodes_; }
+
 	void modulate();
 
 	ofParameterGroup& parameters() { return parameters_; }

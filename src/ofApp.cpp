@@ -98,18 +98,20 @@ void ofApp::register_midi_trigger()
 {
 	const size_t midi_root_channel = 1;
 	const size_t midi_root_note = 12;
+	const size_t num_notes = 12;
 
-	for (auto source_idx: boost::irange(0, 7))
+	for (auto channel_idx: boost::irange(0, 7))
 	{
-		for (auto node_idx: boost::irange(0, 7))
+		for (auto note_idx: boost::irange(0, int(num_notes)))
 		{
-			const auto note = midi_root_note + node_idx;
-			const auto channel = midi_root_channel + source_idx;
+			const auto note = midi_root_note + note_idx;
+			const auto channel = midi_root_channel + channel_idx;
 
-			mapping_.add_trigger(midi::trigger{channel, 0, note,
-			[this, node_idx, source_idx] (const size_t value) {
-				if (auto source = sources_.at(source_idx))
-					source->set_param(node_idx, "alpha", value);
+			mapping_.add_trigger(midi::trigger{channel, 0, note,			
+			[this, channel_idx] (const size_t value) {
+				if (auto source = sources_.at(channel_idx))
+					for (auto& node: source->nodes())
+						node->parameters().get<size_t>(std::string("color_idx")).set(value * 2);
 			}});
 		}
 	}

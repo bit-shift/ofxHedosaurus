@@ -91,14 +91,6 @@ void SkinSource::draw()
 
 //-----------------------------------------------------------------------------
 
-void SkinSource::set_param(const size_t& node_idx,
-			   const std::string& name, const size_t& value)
-{
-	nodes_.at(node_idx)->parameters().get<size_t>(name).set(value * 2);
-}
-
-//-----------------------------------------------------------------------------
-
 void SkinSource::modulate()
 {
 	for (auto& modulation: modulations_)
