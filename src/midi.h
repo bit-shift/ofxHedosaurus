@@ -50,7 +50,10 @@ public:
             {
                 if (source_)
                 {
-                    trigger.fn_(*source_.get(), event.value);
+                    const auto velocity = ofxMidiMessage::getStatusString(event.status) == "Note Off" 
+                        ? 0.0
+                        : event.velocity;
+                    trigger.fn_(*source_.get(), velocity);
                 }                
             }                
         }
@@ -73,13 +76,13 @@ public:
 
     in(mapping& mapping) : mapping_(mapping)
     {
-        in_.listPorts(); // via instance
+        // in_.listPorts(); // via instance
         //ofxMidiIn::listPorts(); // via static as well
         
         // open port by number (you may need to change this)
-        in_.openPort(1);
+        // in_.openPort(1);
         //midiIn.openPort("IAC Pure Data In");	// by name
-        //midiIn.openVirtualPort("ofxMidiIn Input"); // open a virtual port
+        in_.openVirtualPort("ofxHedosaurus Input"); // open a virtual port
         
         // don't ignore sysex, timing, & active sense messages,
         // these are ignored by default

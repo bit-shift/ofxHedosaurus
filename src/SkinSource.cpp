@@ -59,7 +59,7 @@ SkinSource::SkinSource(const std::string source_name,
 	mod2.add_modulator(std::move(mod_fn2));
 	modulations_.push_back(std::move(mod2));
 
-	parameters_.add(alpha_.set("alpha", 0));
+	parameters_.add(alpha_.set("alpha", 255));
 }
 
 //-----------------------------------------------------------------------------

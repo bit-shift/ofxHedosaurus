@@ -33,13 +33,14 @@ class ofApp : public ofBaseApp {
 		
 		engine::sequencer sequencer_;
 
-		std::shared_ptr<SkinSource> head_source_;
-		std::shared_ptr<SkinSource> neck_source_;
-		std::shared_ptr<SkinSource> body_source_;
-		std::shared_ptr<SkinSource> fin_source_;
-		std::shared_ptr<SkinSource> leg_front_source_;
-		std::shared_ptr<SkinSource> leg_back_source_;
-		std::shared_ptr<SkinSource> tail_source_;
+		std::shared_ptr<SkinSource> source0_;
+		std::shared_ptr<SkinSource> source1_;
+		std::shared_ptr<SkinSource> source2_;
+		std::shared_ptr<SkinSource> source3_;
+		std::shared_ptr<SkinSource> source4_;
+		std::shared_ptr<SkinSource> source5_;
+		std::shared_ptr<SkinSource> source6_;
+		std::shared_ptr<SkinSource> source7_;
 
 private:
 	void register_midi_trigger();
