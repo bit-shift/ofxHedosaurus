@@ -6,6 +6,11 @@
 
 namespace engine {
 
+using node_ptr = std::shared_ptr<node>;
+using generate_fn = std::function<void(ofImage&)>;
+
+//-----------------------------------------------------------------------------
+
 node::node() 
 {
     parameters_.add(alpha_.set("alpha", 255));
@@ -32,6 +37,67 @@ auto node::draw() -> void
 auto node::alpha_changed(size_t& alpha) -> void
 {
     active_ = alpha == 0 ? false : true;
+}
+
+//-----------------------------------------------------------------------------
+
+file_node::file_node(const std::string filename) 
+    : node()
+{
+    ofImage image;
+    image.load(filename);
+    texture_.loadData(image.getPixels());
+        
+    image.rotate90(2);
+    texture2_.loadData(image.getPixels());
+}
+
+//-----------------------------------------------------------------------------
+
+color_node::color_node() 
+    : node()
+{
+    ofColor black{0, 0, 0, 0};
+    pxs_.allocate(QUAD_WIDTH, QUAD_HEIGHT, OF_IMAGE_COLOR_ALPHA);
+	pxs_.setColor(black);
+
+    parameters_.add(r_.set("r", 0));
+    parameters_.add(g_.set("g", 0));
+    parameters_.add(b_.set("b", 0));
+}
+
+auto color_node::update() -> void
+{
+    image::set_channel(pxs_, 0, r_.get());
+    image::set_channel(pxs_, 1, g_.get());
+    image::set_channel(pxs_, 2, b_.get());
+
+    texture_.loadData(pxs_);
+
+    node::update();
+}
+
+//-----------------------------------------------------------------------------
+
+auto graph::update() -> void
+{
+    for (auto& node: nodes_)
+    {
+        node->update();
+    }
+}
+
+auto graph::draw() -> void
+{
+    for (auto& node: nodes_)
+    {
+        node->draw();
+    }
+}
+
+auto graph::add_input(node_ptr& node) -> void
+{
+    nodes_.push_back(node);
 }
 
 } // engine
