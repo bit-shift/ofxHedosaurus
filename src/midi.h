@@ -30,16 +30,11 @@ struct trigger {
     size_t channel_;
     size_t control_;
     size_t pitch_;
-    std::function<void(FboSource& source, const size_t value)> fn_;
+    std::function<void(const size_t value)> fn_;
 };
 
 class mapping {
 public:
-    void select_source(std::shared_ptr<FboSource> source)
-    {
-        source_ = source;
-    }
-
     void on_event(ofxMidiMessage& event)
     {
         for (const auto& trigger: triggers_)
@@ -48,13 +43,10 @@ public:
                 trigger.control_ == event.control &&
                 trigger.pitch_ == event.pitch)
             {
-                if (source_)
-                {
-                    const auto velocity = ofxMidiMessage::getStatusString(event.status) == "Note Off" 
-                        ? 0.0
-                        : event.velocity;
-                    trigger.fn_(*source_.get(), velocity);
-                }                
+                const auto velocity = ofxMidiMessage::getStatusString(event.status) == "Note Off" 
+                    ? 0.0
+                    : event.velocity;
+                trigger.fn_(velocity);            
             }                
         }
     }
@@ -65,7 +57,6 @@ public:
     }
 
 private:
-    std::shared_ptr<FboSource> source_;
     std::vector<trigger> triggers_;
 };
 

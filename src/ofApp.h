@@ -45,4 +45,6 @@ class ofApp : public ofBaseApp {
 private:
 	void register_midi_trigger();
 	void setup_modulations();
+
+	std::vector<std::shared_ptr<SkinSource>> sources_;
 };

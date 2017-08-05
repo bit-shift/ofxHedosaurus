@@ -1,5 +1,7 @@
 #include "ofApp.h"
 
+#include <boost/range/irange.hpp>
+
 using Source = ofx::piMapper::FboSource;
 
 void ofApp::setup(){
@@ -34,29 +36,21 @@ void ofApp::setup(){
 	source6_.reset(new SkinSource("Source_6", filenames));
 	source7_.reset(new SkinSource("Source_7", filenames));
 
-	sequencer_.add_source(source0_);
-	sequencer_.add_source(source1_);
-	sequencer_.add_source(source2_);
-	sequencer_.add_source(source3_);
-	sequencer_.add_source(source4_);
-	sequencer_.add_source(source5_);
-	sequencer_.add_source(source6_);
-	sequencer_.add_source(source7_);
+	sources_.push_back(source0_);
+	sources_.push_back(source1_);
+	sources_.push_back(source2_);
+	sources_.push_back(source3_);
+	sources_.push_back(source4_);
+	sources_.push_back(source5_);
+	sources_.push_back(source6_);
+	sources_.push_back(source7_);
 
-	piMapper.registerFboSource(source0_.get());
-	piMapper.registerFboSource(source1_.get());
-	piMapper.registerFboSource(source2_.get());
-	piMapper.registerFboSource(source3_.get());
-	piMapper.registerFboSource(source4_.get());
-	piMapper.registerFboSource(source5_.get());
-	piMapper.registerFboSource(source6_.get());
-	piMapper.registerFboSource(source7_.get());
+	for (const auto& source: sources_)
+	{
+		sequencer_.add_source(source);
+		piMapper.registerFboSource(source.get());
+	}
 	piMapper.setup();
-
-	mapping_.select_source(source0_);
-
-	// The info layer is hidden by default, press <i> to toggle
-	// piMapper.showInfo();
 
 	ofSetFullscreen(Settings::instance()->getFullscreen());
 	ofSetEscapeQuitsApp(false);
@@ -102,287 +96,21 @@ void ofApp::mouseDragged(int x, int y, int button){
 
 void ofApp::register_midi_trigger()
 {
-	//
-	// BPM
-	//
-	mapping_.add_trigger(midi::trigger{1, 14, 0,
-	[this](Source& source, const size_t value){
-		sequencer_.parameters().get<size_t>("bpm").set(value * 2);
-	}});
+	const size_t midi_root_channel = 1;
+	const size_t midi_root_note = 12;
 
-	//
-	// TRANSPORT
-	//
-	mapping_.add_trigger(midi::trigger{1, 0, 91,
-	[this](Source& source, const size_t value){
-		sequencer_.parameters().get<size_t>("running").set(true);
-	}});
-	mapping_.add_trigger(midi::trigger{1, 0, 92,
-	[this](Source& source, const size_t value){
-		sequencer_.parameters().get<size_t>("running").set(false);
-	}});
+	for (auto source_idx: boost::irange(0, 7))
+	{
+		for (auto node_idx: boost::irange(0, 7))
+		{
+			const auto note = midi_root_note + node_idx;
+			const auto channel = midi_root_channel + source_idx;
 
-	//
-	// ALPHA: SOURCE 0
-	//
-	mapping_.add_trigger(midi::trigger{1, 0, 12,
-	[this](Source& source, const size_t value) {
-		source0_->set_param(0, "alpha", value);
-	}});
-
-	mapping_.add_trigger(midi::trigger{1, 0, 13,
-	[this](Source& source, const size_t value) {
-		source0_->set_param(1, "alpha", value);
-	}});
-
-	mapping_.add_trigger(midi::trigger{1, 0, 14,
-	[this](Source& source, const size_t value) {
-		source0_->set_param(2, "alpha", value);
-	}});
-
-	mapping_.add_trigger(midi::trigger{1, 0, 15,
-	[this](Source& source, const size_t value){
-		source0_->set_param(3, "alpha", value);
-	}});
-
-	mapping_.add_trigger(midi::trigger{1, 0, 16,
-	[this](Source& source, const size_t value){
-		source0_->set_param(4, "alpha", value);
-	}});
-
-	mapping_.add_trigger(midi::trigger{1, 0, 17,
-	[this](Source& source, const size_t value){
-		source0_->set_param(5, "alpha", value);
-	}});
-
-	mapping_.add_trigger(midi::trigger{1, 0, 18,
-	[this](Source& source, const size_t value){
-		source0_->set_param(6, "alpha", value);
-	}});
-
-	mapping_.add_trigger(midi::trigger{1, 0, 19,
-	[this](Source& source, const size_t value){
-		source0_->set_param(7, "alpha", value);
-	}});
-
-	//
-	// ALPHA: SOURCE 1
-	//
-	mapping_.add_trigger(midi::trigger{2, 0, 12,
-	[this](Source& source, const size_t value) {
-		source1_->set_param(0, "alpha", value);
-	}});
-
-	mapping_.add_trigger(midi::trigger{2, 0, 13,
-	[this](Source& source, const size_t value) {
-		source1_->set_param(1, "alpha", value);
-	}});
-
-	mapping_.add_trigger(midi::trigger{2, 0, 14,
-	[this](Source& source, const size_t value) {
-		source1_->set_param(2, "alpha", value);
-	}});
-
-	mapping_.add_trigger(midi::trigger{2, 0, 15,
-	[this](Source& source, const size_t value){
-		source1_->set_param(3, "alpha", value);
-	}});
-
-	mapping_.add_trigger(midi::trigger{2, 0, 16,
-	[this](Source& source, const size_t value){
-		source1_->set_param(4, "alpha", value);
-	}});
-
-	mapping_.add_trigger(midi::trigger{2, 0, 17,
-	[this](Source& source, const size_t value){
-		source1_->set_param(5, "alpha", value);
-	}});
-
-	mapping_.add_trigger(midi::trigger{2, 0, 18,
-	[this](Source& source, const size_t value){
-		source1_->set_param(6, "alpha", value);
-	}});
-
-	mapping_.add_trigger(midi::trigger{2, 0, 19,
-	[this](Source& source, const size_t value){
-		source1_->set_param(7, "alpha", value);
-	}});
-
-	//
-	// ALPHA: SOURCE 2
-	//
-	mapping_.add_trigger(midi::trigger{3, 0, 12,
-	[this](Source& source, const size_t value) {
-		source2_->set_param(0, "alpha", value);
-	}});
-
-	mapping_.add_trigger(midi::trigger{3, 0, 13,
-	[this](Source& source, const size_t value) {
-		source2_->set_param(1, "alpha", value);
-	}});
-
-	mapping_.add_trigger(midi::trigger{3, 0, 14,
-	[this](Source& source, const size_t value) {
-		source2_->set_param(2, "alpha", value);
-	}});
-
-	mapping_.add_trigger(midi::trigger{3, 0, 15,
-	[this](Source& source, const size_t value){
-		source2_->set_param(3, "alpha", value);
-	}});
-
-	mapping_.add_trigger(midi::trigger{3, 0, 16,
-	[this](Source& source, const size_t value){
-		source2_->set_param(4, "alpha", value);
-	}});
-
-	mapping_.add_trigger(midi::trigger{3, 0, 17,
-	[this](Source& source, const size_t value){
-		source2_->set_param(5, "alpha", value);
-	}});
-
-	mapping_.add_trigger(midi::trigger{3, 0, 18,
-	[this](Source& source, const size_t value){
-		source2_->set_param(6, "alpha", value);
-	}});
-
-	mapping_.add_trigger(midi::trigger{3, 0, 19,
-	[this](Source& source, const size_t value){
-		source2_->set_param(7, "alpha", value);
-	}});
-
-	//
-	// ALPHA: SOURCE 3
-	//
-	mapping_.add_trigger(midi::trigger{4, 0, 12,
-	[this](Source& source, const size_t value) {
-		source3_->set_param(0, "alpha", value);
-	}});
-
-	mapping_.add_trigger(midi::trigger{4, 0, 13,
-	[this](Source& source, const size_t value) {
-		source3_->set_param(1, "alpha", value);
-	}});
-
-	mapping_.add_trigger(midi::trigger{4, 0, 14,
-	[this](Source& source, const size_t value) {
-		source3_->set_param(2, "alpha", value);
-	}});
-
-	mapping_.add_trigger(midi::trigger{4, 0, 15,
-	[this](Source& source, const size_t value){
-		source3_->set_param(3, "alpha", value);
-	}});
-
-	mapping_.add_trigger(midi::trigger{4, 0, 16,
-	[this](Source& source, const size_t value){
-		source3_->set_param(4, "alpha", value);
-	}});
-
-	mapping_.add_trigger(midi::trigger{4, 0, 17,
-	[this](Source& source, const size_t value){
-		source3_->set_param(5, "alpha", value);
-	}});
-
-	mapping_.add_trigger(midi::trigger{4, 0, 18,
-	[this](Source& source, const size_t value){
-		source3_->set_param(6, "alpha", value);
-	}});
-
-	mapping_.add_trigger(midi::trigger{4, 0, 19,
-	[this](Source& source, const size_t value){
-		source3_->set_param(7, "alpha", value);
-	}});
-	
-
-	//
-	// SOURCE SELECTION
-	//
-	mapping_.add_trigger(midi::trigger{1, 0, 52,
-	[this](Source& source, const size_t value){
-		mapping_.select_source(source0_);
-	}});
-
-	mapping_.add_trigger(midi::trigger{2, 0, 52,
-	[this](Source& source, const size_t value){
-		mapping_.select_source(source1_);
-	}});
-
-	mapping_.add_trigger(midi::trigger{3, 0, 52,
-	[this](Source& source, const size_t value){
-		mapping_.select_source(source2_);
-	}});
-
-	mapping_.add_trigger(midi::trigger{4, 0, 52,
-	[this](Source& source, const size_t value){
-		mapping_.select_source(source3_);
-	}});
-
-	mapping_.add_trigger(midi::trigger{5, 0, 52,
-	[this](Source& source, const size_t value){
-		mapping_.select_source(source4_);
-	}});
-
-	mapping_.add_trigger(midi::trigger{6, 0, 52,
-	[this](Source& source, const size_t value){
-		mapping_.select_source(source5_);
-	}});
-
-	mapping_.add_trigger(midi::trigger{7, 0, 52,
-	[this](Source& source, const size_t value){
-		mapping_.select_source(source6_);
-	}});
-
-	mapping_.add_trigger(midi::trigger{8, 0, 52,
-	[this](Source& source, const size_t value){
-		mapping_.select_source(source7_);
-	}});
-
-	//
-	// ALPHA
-	//
-	mapping_.add_trigger(midi::trigger{1, 7, 0,
-	[this](Source& source, const size_t value) {
-		source0_->parameters().get<size_t>("alpha").set(value * 2);
-	}});
-
-	mapping_.add_trigger(midi::trigger{2, 7, 0,
-	[this](Source& source, const size_t value) {
-		source1_->parameters().get<size_t>("alpha").set(value * 2);
-	}});
-
-	mapping_.add_trigger(midi::trigger{3, 7, 0,
-	[this](Source& source, const size_t value) {
-		source2_->parameters().get<size_t>("alpha").set(value * 2);
-	}});
-
-	mapping_.add_trigger(midi::trigger{4, 7, 0,
-	[this](Source& source, const size_t value){
-		source3_->parameters().get<size_t>("alpha").set(value * 2);
-	}});
-
-	mapping_.add_trigger(midi::trigger{5, 7, 0,
-	[this](Source& source, const size_t value){
-		source4_->parameters().get<size_t>("alpha").set(value * 2);
-	}});
-
-	mapping_.add_trigger(midi::trigger{6, 7, 0,
-	[this](Source& source, const size_t value){
-		source5_->parameters().get<size_t>("alpha").set(value * 2);
-	}});
-
-	mapping_.add_trigger(midi::trigger{7, 7, 0,
-	[this](Source& source, const size_t value){
-		source6_->parameters().get<size_t>("alpha").set(value * 2);
-	}});
-
-	mapping_.add_trigger(midi::trigger{7, 7, 0,
-	[this](Source& source, const size_t value){
-		source7_->parameters().get<size_t>("alpha").set(value * 2);
-	}});
-
-	// midi_in_.add_trigger(midi::trigger{8, 7, 0,FboSource& source,
-	// [this](FboSource& source, const size_t value){
-	// 	node7_->parameters().get<size_t>("alpha").set(value * 2);
-	// }});
+			mapping_.add_trigger(midi::trigger{channel, 0, note,
+			[this, node_idx, source_idx] (const size_t value) {
+				if (auto source = sources_.at(source_idx))
+					source->set_param(node_idx, "alpha", value);
+			}});
+		}
+	}
 }
