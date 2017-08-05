@@ -12,38 +12,13 @@ namespace engine {
 
 class node {
 public:
-    node()
-    {
-        parameters_.add(alpha_.set("alpha", 0));
-        parameters_.add(y_.set("y", 0));
-        
-        alpha_.addListener(this, &node::alpha_changed);
-    }
+    node();
 
-    void update()
-    {        
-    }
+    auto update() -> void {}
+    auto draw() -> void;
+    auto alpha_changed(size_t& alpha) -> void;
 
-    void draw()
-    {
-        if (active_)
-        {
-            const int offset = - QUAD_HEIGHT + y_.get();
-            ofSetColor(255, 255, 255, alpha_.get());
-            // texture_.draw(-20 + y_.get(), -20 + (y_.get() / 6));
-            texture2_.draw(0, 0);
-            // frank: 0175 8808861
-            // texture2_.draw(0, offset);
-            // texture2_.draw(0, offset - 153);
-        }  
-    }
-
-    void alpha_changed(size_t& alpha)
-    {
-        active_ = alpha == 0 ? false : true;
-    }
-
-    ofParameterGroup& parameters() { return parameters_; }
+    auto parameters() -> ofParameterGroup& { return parameters_; }
 
 protected:
     bool active_ = true;
@@ -53,6 +28,7 @@ protected:
 
     ofParameterGroup parameters_;
     ofParameter<size_t> alpha_;
+    ofParameter<size_t> color_idx_;
     ofParameter<int> x_;
     ofParameter<int> y_;
 };
