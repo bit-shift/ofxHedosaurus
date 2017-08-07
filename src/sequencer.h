@@ -88,8 +88,8 @@ public:
     {
         if (running_.get())
         {
-            for (auto source: sources_)
-                source->modulate();
+            // for (auto source: sources_)
+            //     source->modulate();
         }
     }
 

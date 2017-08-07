@@ -93,8 +93,7 @@ public:
     }
 
     void newMidiMessage(ofxMidiMessage& event)
-    { 
-        log_message(event);
+    {
         msg_ = event;
         mapping_.on_event(event);
     }

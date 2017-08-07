@@ -17,6 +17,11 @@ int main(int argc, char * argv[]){
 	
 	Settings::instance()->setFullscreen(fullscreen);
 
-	ofSetupOpenGL(800, 450, OF_WINDOW);
+	ofGLWindowSettings settings;
+    settings.setGLVersion(3,2);
+    auto window = ofCreateWindow(settings);
+
+	// ofSetupOpenGL(800, 450, OF_WINDOW);
+
 	ofRunApp(new ofApp());
 }
