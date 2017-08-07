@@ -13,10 +13,10 @@ void ofApp::setup(){
 	ofx::piMapper::VideoSource::useHDMIForAudio = false;
 
 	std::vector<std::string> filenames = {
-		"assets/spaceship_tex_00.png",
-		"assets/spaceship_tex_01.png",
-		"assets/spaceship_tex_02.png",
-		"assets/spaceship_tex_03.png",
+		"assets/spaceship_tex_08.png",
+		"assets/spaceship_tex_09.png",
+		"assets/spaceship_tex_10.png",
+		"assets/spaceship_tex_11.png",
 		"assets/spaceship_tex_04.png",
 		"assets/spaceship_tex_05.png",
 		"assets/spaceship_tex_06.png",
