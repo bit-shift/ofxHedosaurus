@@ -7,17 +7,14 @@ uniform mat4 modelViewProjectionMatrix;
 in vec4 position;
 in vec2 texcoord;
 
-// this is something we're creating for this shader
 out vec2 texCoordVarying;
+out vec3 pos;
 
 // this is coming from our C++ code
 uniform float mouseX;
 
-void main()
+void main(void)
 {
-    // here we move the texture coordinates
-    texCoordVarying = vec2(texcoord.x + mouseX, texcoord.y);
-
-    // send the vertices to the fragment shader
-	gl_Position = modelViewProjectionMatrix * position;
+    pos = gl_Vertex.xyz;
+    gl_Position = ftransform();
 }

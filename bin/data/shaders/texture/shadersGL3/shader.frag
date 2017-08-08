@@ -10,4 +10,5 @@ out vec4 outputColor;
 void main()
 {
     outputColor = texture(tex0, texCoordVarying);
+    // outputColor = vec4(1.0, 1.0, 1.0, 1.0);
 }
