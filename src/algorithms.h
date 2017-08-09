@@ -17,4 +17,10 @@ inline void set_channel(ofPixels& pixels, const size_t channel,
 	}
 }
 
+inline std::string name_from_path(const std::string& full_path)
+{
+	auto parts = ofSplitString(full_path, "/");
+	return parts.empty() ? "Unknown" : *(parts.end());
+} 
+
 } // image
