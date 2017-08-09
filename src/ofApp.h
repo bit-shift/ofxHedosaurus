@@ -33,18 +33,9 @@ class ofApp : public ofBaseApp {
 		
 		engine::sequencer sequencer_;
 
-		std::shared_ptr<TextureSource> source0_;
-		std::shared_ptr<TextureSource> source1_;
-		std::shared_ptr<TextureSource> source2_;
-		std::shared_ptr<TextureSource> source3_;
-		std::shared_ptr<TextureSource> source4_;
-		std::shared_ptr<TextureSource> source5_;
-		std::shared_ptr<TextureSource> source6_;
-		std::shared_ptr<TextureSource> source7_;
-
 private:
 	void register_midi_trigger();
 	void setup_modulations();
 
-	std::vector<std::shared_ptr<TextureSource>> sources_;
+	vector<shared_ptr<TextureSource>> sources_;
 };

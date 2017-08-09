@@ -38,23 +38,13 @@ void ofApp::setup(){
 	// FBO sources should be added before piMapper.setup() so the
 	// piMapper is able to load the source if it is assigned to
 	// a surface in XML settings.
-	source0_.reset(new TextureSource("Source_0", images));
-	source1_.reset(new TextureSource("Source_1", images));
-	source2_.reset(new TextureSource("Source_2", images));
-	source3_.reset(new TextureSource("Source_3", images));
-	source4_.reset(new TextureSource("Source_4", images));
-	source5_.reset(new TextureSource("Source_5", images));
-	source6_.reset(new TextureSource("Source_6", images));
-	source7_.reset(new TextureSource("Source_7", images));
-
-	sources_.push_back(source0_);
-	sources_.push_back(source1_);
-	sources_.push_back(source2_);
-	sources_.push_back(source3_);
-	sources_.push_back(source4_);
-	sources_.push_back(source5_);
-	sources_.push_back(source6_);
-	sources_.push_back(source7_);
+	for (auto source_idx : boost::irange(0, 7))
+	{
+		const string name = "Source_" + to_string(source_idx);
+		const auto source = make_shared<TextureSource>(name, images);
+		
+		sources_.push_back(source);
+	}
 
 	for (const auto& source: sources_)
 	{
