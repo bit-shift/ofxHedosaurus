@@ -38,14 +38,14 @@ void ofApp::setup(){
 	// FBO sources should be added before piMapper.setup() so the
 	// piMapper is able to load the source if it is assigned to
 	// a surface in XML settings.
-	source0_.reset(new SkinSource("Source_0", images));
-	source1_.reset(new SkinSource("Source_1", images));
-	source2_.reset(new SkinSource("Source_2", images));
-	source3_.reset(new SkinSource("Source_3", images));
-	source4_.reset(new SkinSource("Source_4", images));
-	source5_.reset(new SkinSource("Source_5", images));
-	source6_.reset(new SkinSource("Source_6", images));
-	source7_.reset(new SkinSource("Source_7", images));
+	source0_.reset(new TextureSource("Source_0", images));
+	source1_.reset(new TextureSource("Source_1", images));
+	source2_.reset(new TextureSource("Source_2", images));
+	source3_.reset(new TextureSource("Source_3", images));
+	source4_.reset(new TextureSource("Source_4", images));
+	source5_.reset(new TextureSource("Source_5", images));
+	source6_.reset(new TextureSource("Source_6", images));
+	source7_.reset(new TextureSource("Source_7", images));
 
 	sources_.push_back(source0_);
 	sources_.push_back(source1_);
@@ -70,7 +70,6 @@ void ofApp::setup(){
 }
 
 void ofApp::update(){
-	sequencer_.update();
 	piMapper.update();
 }
 

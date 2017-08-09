@@ -9,10 +9,10 @@
 #include <ofxCvColorImage.h>
 #include <ofMain.h>
 
-class SkinSource : public ofx::piMapper::FboSource {
+class TextureSource : public ofx::piMapper::FboSource {
 
 public:
-	SkinSource(const string name, vector<string> image_paths);
+	TextureSource(const string name, vector<string> image_paths);
 
 	void setup();
 	void update();
@@ -20,11 +20,12 @@ public:
 
 	void set_param(const size_t& node_idx,
 				   const string& name, const size_t& value);
-	void modulate();
 
 	ofParameterGroup& parameters() { return parameters_; }
 
 private:
+	void modulate();
+	
 	vector<string> image_paths_;
 
 	vector<engine::node_ptr> nodes_;

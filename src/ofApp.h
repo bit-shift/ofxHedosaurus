@@ -7,7 +7,7 @@
 #include "ofMain.h"
 #include "Settings.h"
 #include "ofxPiMapper.h"
-#include "SkinSource.h"
+#include "TextureSource.h"
 #include "VideoSource.h"
 
 class ofApp : public ofBaseApp {
@@ -33,18 +33,18 @@ class ofApp : public ofBaseApp {
 		
 		engine::sequencer sequencer_;
 
-		std::shared_ptr<SkinSource> source0_;
-		std::shared_ptr<SkinSource> source1_;
-		std::shared_ptr<SkinSource> source2_;
-		std::shared_ptr<SkinSource> source3_;
-		std::shared_ptr<SkinSource> source4_;
-		std::shared_ptr<SkinSource> source5_;
-		std::shared_ptr<SkinSource> source6_;
-		std::shared_ptr<SkinSource> source7_;
+		std::shared_ptr<TextureSource> source0_;
+		std::shared_ptr<TextureSource> source1_;
+		std::shared_ptr<TextureSource> source2_;
+		std::shared_ptr<TextureSource> source3_;
+		std::shared_ptr<TextureSource> source4_;
+		std::shared_ptr<TextureSource> source5_;
+		std::shared_ptr<TextureSource> source6_;
+		std::shared_ptr<TextureSource> source7_;
 
 private:
 	void register_midi_trigger();
 	void setup_modulations();
 
-	std::vector<std::shared_ptr<SkinSource>> sources_;
+	std::vector<std::shared_ptr<TextureSource>> sources_;
 };
