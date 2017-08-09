@@ -34,7 +34,7 @@ class ofApp : public ofBaseApp {
 		engine::sequencer sequencer_;
 
 private:
-	void register_midi_trigger();
+	void register_midi_trigger(const size_t node_count);
 	void setup_modulations();
 
 	vector<shared_ptr<TextureSource>> sources_;

@@ -85,7 +85,8 @@ video_node::video_node(const std::string filename)
 #ifdef TARGET_RASPBERRY_PI
 
 #else
-	player_.load(filename);
+	if (!player_.load(filename))
+        ofLogNotice("video_node::video_node()") << "Video could not be loaded";
 	player_.setLoopState(OF_LOOP_NORMAL);
 	player_.play();
 	player_.setVolume(0.0f);

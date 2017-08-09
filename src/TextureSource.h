@@ -12,21 +12,24 @@
 class TextureSource : public ofx::piMapper::FboSource {
 
 public:
-	TextureSource(const string name, vector<string> image_paths);
+	TextureSource(const string name, 
+				vector<string> image_paths, 
+				vector<string> video_paths);
 
 	void setup();
 	void update();
 	void draw();
 
-	void set_param(const size_t& node_idx,
-				   const string& name, const size_t& value);
+	void set_param(const size_t& node_idx, 
+				const string& name, const size_t& value);
 
 	ofParameterGroup& parameters() { return parameters_; }
 
 private:
 	void modulate();
-	
+
 	vector<string> image_paths_;
+	vector<string> video_paths_;
 
 	vector<engine::node_ptr> nodes_;
 	vector<engine::modulation> modulations_;

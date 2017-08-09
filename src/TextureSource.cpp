@@ -10,9 +10,12 @@
 
 using namespace engine;
 
-TextureSource::TextureSource(const string source_name, vector<string> image_paths)
+TextureSource::TextureSource(const string source_name, 
+							vector<string> image_paths,
+							vector<string> video_paths)
 	: FboSource()
 	, image_paths_(image_paths)
+	, video_paths_(video_paths)
 {
 	name = source_name;
 }
@@ -37,6 +40,13 @@ void TextureSource::setup()
 		}};
 		mod.add_modulator(std::move(mod_fn));
 		modulations_.push_back(std::move(mod));
+	}
+
+	for (const auto& path : video_paths_)
+	{
+		const auto node = make_shared<video_node>(path);
+		graph_.add_input(node);
+		nodes_.push_back(node);
 	}
 
 	parameters_.add(alpha_.set("alpha", 255));

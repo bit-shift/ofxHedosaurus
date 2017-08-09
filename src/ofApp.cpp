@@ -13,25 +13,22 @@ void ofApp::setup(){
 	ofx::piMapper::VideoSource::useHDMIForAudio = false;
 
 	std::vector<std::string> images = {
+		"assets/spaceship_tex_00.png",
+		"assets/spaceship_tex_01.png",
+		"assets/spaceship_tex_02.png",
+		"assets/spaceship_tex_03.png",
+		"assets/spaceship_tex_04.png",
+		"assets/spaceship_tex_05.png",
+		"assets/spaceship_tex_06.png",
+		"assets/spaceship_tex_07.png",
 		"assets/spaceship_tex_08.png",
 		"assets/spaceship_tex_09.png",
 		"assets/spaceship_tex_10.png",
 		"assets/spaceship_tex_11.png",
-		"assets/spaceship_tex_04.png",
-		"assets/spaceship_tex_05.png",
-		"assets/spaceship_tex_06.png",
-		"assets/spaceship_tex_07.png"
 	};
 
 	std::vector<std::string> videos = {
-		"assets/spaceship_tex_08.png",
-		"assets/spaceship_tex_09.png",
-		"assets/spaceship_tex_10.png",
-		"assets/spaceship_tex_11.png",
-		"assets/spaceship_tex_04.png",
-		"assets/spaceship_tex_05.png",
-		"assets/spaceship_tex_06.png",
-		"assets/spaceship_tex_07.png"
+		// "sources/videos/VJzoo_CVIp017redlava.avi"
 	};
 
 	// Add our CustomSource to list of fbo sources of the piMapper
@@ -41,7 +38,7 @@ void ofApp::setup(){
 	for (auto source_idx : boost::irange(0, 7))
 	{
 		const string name = "Source_" + to_string(source_idx);
-		const auto source = make_shared<TextureSource>(name, images);
+		const auto source = make_shared<TextureSource>(name, images, videos);
 
 		sources_.push_back(source);
 
@@ -54,7 +51,7 @@ void ofApp::setup(){
 	ofSetFullscreen(Settings::instance()->getFullscreen());
 	ofSetEscapeQuitsApp(false);
 
-	register_midi_trigger();
+	register_midi_trigger(images.size());
 }
 
 void ofApp::update(){
@@ -92,14 +89,14 @@ void ofApp::mouseDragged(int x, int y, int button){
 	piMapper.mouseDragged(x, y, button);
 }
 
-void ofApp::register_midi_trigger()
+void ofApp::register_midi_trigger(const size_t node_count)
 {
 	const size_t midi_root_channel = 1;
 	const size_t midi_root_note = 12;
 
-	for (auto source_idx: boost::irange(0, 7))
+	for (auto source_idx: boost::irange(0, 15))
 	{
-		for (auto node_idx: boost::irange(0, 7))
+		for (auto node_idx: boost::irange(0, int(node_count)))
 		{
 			const auto note = midi_root_note + node_idx;
 			const auto channel = midi_root_channel + source_idx;
