@@ -10,62 +10,27 @@
 
 using namespace engine;
 
-SkinSource::SkinSource(const std::string source_name,
-					   const std::vector<std::string>& filenames)
+SkinSource::SkinSource(const string source_name, vector<string> image_paths)
 	: FboSource()
-	, node0_(new file_node(filenames.at(0)))
-	, node1_(new file_node(filenames.at(1)))
-	, node2_(new file_node(filenames.at(2)))
-	, node3_(new file_node(filenames.at(3)))
-	, node4_(new file_node(filenames.at(4)))
-	, node5_(new file_node(filenames.at(5)))
-	, node6_(new file_node(filenames.at(6)))
-	, node7_(new file_node(filenames.at(7)))
-
+	, image_paths_(image_paths)
 {
 	name = source_name;
-	allocate(QUAD_WIDTH, QUAD_HEIGHT);
-
-	graph_.add_input(node0_);
-	nodes_.push_back(node0_);
-
-	graph_.add_input(node1_);
-	nodes_.push_back(node1_);
-
-	graph_.add_input(node2_);
-	nodes_.push_back(node2_);
-
-	graph_.add_input(node3_);
-	nodes_.push_back(node3_);
-
-	graph_.add_input(node4_);
-	nodes_.push_back(node4_);
-
-	graph_.add_input(node5_);
-	nodes_.push_back(node5_);
-
-	graph_.add_input(node6_);
-	nodes_.push_back(node6_);
-
-	graph_.add_input(node7_);
-	nodes_.push_back(node7_);
-
-	modulation mod2{node2_};
-	modulator mod_fn2 {"alpha", [](ofParameter<size_t>& param) {
-		auto value = param.get();
-        value = value == 255 ? 0 : 255;
-        param.set(value);
-	}};
-	mod2.add_modulator(std::move(mod_fn2));
-	modulations_.push_back(std::move(mod2));
-
-	parameters_.add(alpha_.set("alpha", 255));
 }
 
 //-----------------------------------------------------------------------------
 
 void SkinSource::setup()
 {
+	allocate(QUAD_WIDTH, QUAD_HEIGHT);
+
+	for (const auto& path : image_paths_)
+	{
+		const auto node = make_shared<file_node>(path);
+		graph_.add_input(node);
+		nodes_.push_back(node);
+	}
+
+	parameters_.add(alpha_.set("alpha", 255));
 }
 
 //-----------------------------------------------------------------------------
@@ -92,9 +57,10 @@ void SkinSource::draw()
 //-----------------------------------------------------------------------------
 
 void SkinSource::set_param(const size_t& node_idx,
-			   const std::string& name, const size_t& value)
+			   const string& name, const size_t& value)
 {
-	nodes_.at(node_idx)->parameters().get<size_t>(name).set(value * 2);
+	if(const auto node = nodes_.at(node_idx))
+		node->parameters().get<size_t>(name).set(value * 2);
 }
 
 //-----------------------------------------------------------------------------

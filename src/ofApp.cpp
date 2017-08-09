@@ -12,7 +12,18 @@ void ofApp::setup(){
 	ofx::piMapper::VideoSource::enableAudio = true;
 	ofx::piMapper::VideoSource::useHDMIForAudio = false;
 
-	std::vector<std::string> filenames = {
+	std::vector<std::string> images = {
+		"assets/spaceship_tex_08.png",
+		"assets/spaceship_tex_09.png",
+		"assets/spaceship_tex_10.png",
+		"assets/spaceship_tex_11.png",
+		"assets/spaceship_tex_04.png",
+		"assets/spaceship_tex_05.png",
+		"assets/spaceship_tex_06.png",
+		"assets/spaceship_tex_07.png"
+	};
+
+	std::vector<std::string> videos = {
 		"assets/spaceship_tex_08.png",
 		"assets/spaceship_tex_09.png",
 		"assets/spaceship_tex_10.png",
@@ -27,14 +38,14 @@ void ofApp::setup(){
 	// FBO sources should be added before piMapper.setup() so the
 	// piMapper is able to load the source if it is assigned to
 	// a surface in XML settings.
-	source0_.reset(new SkinSource("Source_0", filenames));
-	source1_.reset(new SkinSource("Source_1", filenames));
-	source2_.reset(new SkinSource("Source_2", filenames));
-	source3_.reset(new SkinSource("Source_3", filenames));
-	source4_.reset(new SkinSource("Source_4", filenames));
-	source5_.reset(new SkinSource("Source_5", filenames));
-	source6_.reset(new SkinSource("Source_6", filenames));
-	source7_.reset(new SkinSource("Source_7", filenames));
+	source0_.reset(new SkinSource("Source_0", images));
+	source1_.reset(new SkinSource("Source_1", images));
+	source2_.reset(new SkinSource("Source_2", images));
+	source3_.reset(new SkinSource("Source_3", images));
+	source4_.reset(new SkinSource("Source_4", images));
+	source5_.reset(new SkinSource("Source_5", images));
+	source6_.reset(new SkinSource("Source_6", images));
+	source7_.reset(new SkinSource("Source_7", images));
 
 	sources_.push_back(source0_);
 	sources_.push_back(source1_);

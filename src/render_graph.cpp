@@ -13,7 +13,7 @@ using generate_fn = std::function<void(ofImage&)>;
 
 node::node() 
 {
-    parameters_.add(alpha_.set("alpha", 255));
+    parameters_.add(alpha_.set("alpha", 0));
     parameters_.add(y_.set("y", 0));
     parameters_.add(color_idx_.set("color_idx", 0));
         
@@ -26,9 +26,11 @@ auto node::draw() -> void
     {
         const int offset = - QUAD_HEIGHT + y_.get();
         ofSetColor(255, 255, 255, alpha_.get());
-        // texture_.draw(-20 + y_.get(), -20 + (y_.get() / 6));
-        texture2_.draw(0, 0);
+
+        texture_.draw(0, 0);
+
         // frank: 0175 8808861
+        // texture2_.draw(-20 + y_.get(), -20 + (y_.get() / 6));
         // texture2_.draw(0, offset);
         // texture2_.draw(0, offset - 153);
     }  
@@ -46,10 +48,8 @@ file_node::file_node(const std::string filename)
 {
     ofImage image;
     image.load(filename);
-    texture_.loadData(image.getPixels());
-        
     image.rotate90(2);
-    texture2_.loadData(image.getPixels());
+    texture_.loadData(image.getPixels());
 }
 
 //-----------------------------------------------------------------------------
@@ -79,6 +79,35 @@ auto color_node::update() -> void
 
 //-----------------------------------------------------------------------------
 
+video_node::video_node(const std::string filename) 
+    : node()
+{
+#ifdef TARGET_RASPBERRY_PI
+
+#else
+	player_.load(filename);
+	player_.setLoopState(OF_LOOP_NORMAL);
+	player_.play();
+	player_.setVolume(0.0f);
+	texture_ = player_.getTexture();
+#endif
+}
+
+video_node::~video_node()
+{
+    player_.stop();
+	player_.close();
+}
+
+auto video_node::update() -> void
+{
+    player_.update();
+
+    node::update();
+}
+
+//-----------------------------------------------------------------------------
+
 auto graph::update() -> void
 {
     for (auto& node: nodes_)
@@ -95,7 +124,7 @@ auto graph::draw() -> void
     }
 }
 
-auto graph::add_input(node_ptr& node) -> void
+auto graph::add_input(node_ptr node) -> void
 {
     nodes_.push_back(node);
 }

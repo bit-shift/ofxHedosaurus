@@ -2,6 +2,11 @@
 
 #include <ofMain.h>
 
+#ifdef TARGET_RASPBERRY_PI
+ #include "ofxOMXPlayer.h"
+ #include "OMXPlayerCache.h"
+#endif
+
 #include <constants.h>
 #include <algorithms.h>
 
@@ -11,6 +16,7 @@ namespace engine {
 //-----------------------------------------------------------------------------
 
 class node {
+
 public:
     node();
 
@@ -24,7 +30,6 @@ protected:
     bool active_ = true;
     
     ofTexture texture_;
-    ofTexture texture2_;
 
     ofParameterGroup parameters_;
     ofParameter<size_t> alpha_;
@@ -36,19 +41,40 @@ protected:
 //-----------------------------------------------------------------------------
 
 class file_node : public node {
+
 public:
     file_node(const std::string filename);
 };
 
 //-----------------------------------------------------------------------------
 
+class video_node : public node {
+
+public:
+    video_node(const std::string filename);
+    ~video_node();
+
+    auto update() -> void;
+
+private:
+#ifdef TARGET_RASPBERRY_PI
+	ofxOMXPlayer omxPlayer_;
+#else
+	ofVideoPlayer player_;
+#endif
+};
+
+
+//-----------------------------------------------------------------------------
+
 using generate_fn = std::function<void(ofImage&)>;
 
 class color_node : public node {
+
 public:
     color_node();
 
-    auto update() ->void;
+    auto update() -> void;
 
 private:
     ofParameter<size_t> r_;
@@ -63,12 +89,13 @@ private:
 using node_ptr = std::shared_ptr<node>;
 
 class graph {
+
 public:
     graph() {}
 
     auto update() -> void;
     auto draw() -> void;
-    auto add_input(node_ptr& node) -> void;
+    auto add_input(node_ptr node) -> void;
 
 private:
     vector<node_ptr> nodes_;
