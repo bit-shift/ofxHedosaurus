@@ -42,15 +42,13 @@ void ofApp::setup(){
 	{
 		const string name = "Source_" + to_string(source_idx);
 		const auto source = make_shared<TextureSource>(name, images);
-		
-		sources_.push_back(source);
-	}
 
-	for (const auto& source: sources_)
-	{
+		sources_.push_back(source);
+
 		sequencer_.add_source(source);
 		piMapper.registerFboSource(source.get());
 	}
+
 	piMapper.setup();
 
 	ofSetFullscreen(Settings::instance()->getFullscreen());
