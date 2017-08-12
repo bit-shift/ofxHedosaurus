@@ -28,7 +28,7 @@ void ofApp::setup(){
 	};
 
 	std::vector<std::string> videos = {
-		// "sources/videos/VJzoo_CVIp017redlava.avi"
+		// "sources/videos/VJzoo_CVIp005diagstrips.avi"
 	};
 
 	// Add our CustomSource to list of fbo sources of the piMapper
@@ -51,7 +51,7 @@ void ofApp::setup(){
 	ofSetFullscreen(Settings::instance()->getFullscreen());
 	ofSetEscapeQuitsApp(false);
 
-	register_midi_trigger(images.size());
+	register_midi_trigger(images.size() + videos.size());
 }
 
 void ofApp::update(){

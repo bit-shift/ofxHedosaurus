@@ -20,7 +20,7 @@ class node {
 public:
     node();
 
-    auto update() -> void {}
+    virtual auto update() -> void {}
     auto draw() -> void;
     auto alpha_changed(size_t& alpha) -> void;
 
@@ -55,6 +55,7 @@ public:
     ~video_node();
 
     auto update() -> void;
+    auto draw() -> void;
 
 private:
 #ifdef TARGET_RASPBERRY_PI

@@ -15,6 +15,7 @@ node::node()
 {
     parameters_.add(alpha_.set("alpha", 0));
     parameters_.add(y_.set("y", 0));
+    parameters_.add(x_.set("x", 0));
     parameters_.add(color_idx_.set("color_idx", 0));
         
     alpha_.addListener(this, &node::alpha_changed);
@@ -27,7 +28,7 @@ auto node::draw() -> void
         const int offset = - QUAD_HEIGHT + y_.get();
         ofSetColor(255, 255, 255, alpha_.get());
 
-        texture_.draw(0, 0);
+        texture_.draw(x_.get(), y_.get());
 
         // frank: 0175 8808861
         // texture2_.draw(-20 + y_.get(), -20 + (y_.get() / 6));
@@ -48,7 +49,6 @@ file_node::file_node(const std::string filename)
 {
     ofImage image;
     image.load(filename);
-    image.rotate90(2);
     texture_.loadData(image.getPixels());
 }
 
@@ -79,18 +79,20 @@ auto color_node::update() -> void
 
 //-----------------------------------------------------------------------------
 
-video_node::video_node(const std::string filename) 
+video_node::video_node(const std::string filename)
     : node()
 {
 #ifdef TARGET_RASPBERRY_PI
 
 #else
 	if (!player_.load(filename))
-        ofLogNotice("video_node::video_node()") << "Video could not be loaded";
+        ofLogNotice("video_node::setup()") << "Video could not be loaded: " << filename;
 	player_.setLoopState(OF_LOOP_NORMAL);
 	player_.play();
 	player_.setVolume(0.0f);
+    player_.setUseTexture(true);
 	texture_ = player_.getTexture();
+    ofLogNotice("video_node::video_node()") << "Player created";
 #endif
 }
 
@@ -102,9 +104,10 @@ video_node::~video_node()
 
 auto video_node::update() -> void
 {
-    player_.update();
-
-    node::update();
+    if (player_.isInitialized())
+        player_.update();
+    else
+        ofLogNotice("video_node::update()") << "Player not initialized";
 }
 
 //-----------------------------------------------------------------------------

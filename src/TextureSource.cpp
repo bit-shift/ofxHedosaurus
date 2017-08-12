@@ -32,14 +32,14 @@ void TextureSource::setup()
 		graph_.add_input(node);
 		nodes_.push_back(node);
 
-		modulation mod{node};
-		modulator mod_fn {"alpha", [](ofParameter<size_t>& param) {
-			auto value = param.get();
-        	value = value == 255 ? 0 : 255;
-        	// param.set(value);
-		}};
-		mod.add_modulator(std::move(mod_fn));
-		modulations_.push_back(std::move(mod));
+		// modulation mod{node};
+		// modulator mod_fn {"alpha", [](ofParameter<size_t>& param) {
+		// 	auto value = param.get();
+        // 	value = value == 255 ? 0 : 255;
+        // 	// param.set(value);
+		// }};
+		// mod.add_modulator(std::move(mod_fn));
+		// modulations_.push_back(std::move(mod));
 	}
 
 	for (const auto& path : video_paths_)
