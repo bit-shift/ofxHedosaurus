@@ -49,6 +49,10 @@ void TextureSource::setup()
 		nodes_.push_back(node);
 	}
 
+	const auto node = make_shared<triangle_node>();
+	graph_.add_input(node);
+	nodes_.push_back(node);
+
 	parameters_.add(alpha_.set("alpha", 255));
 }
 

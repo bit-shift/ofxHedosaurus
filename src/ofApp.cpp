@@ -19,12 +19,26 @@ void ofApp::setup(){
 		"assets/spaceship_tex_03.png",
 		"assets/spaceship_tex_04.png",
 		"assets/spaceship_tex_05.png",
-		"assets/spaceship_tex_06.png",
-		"assets/spaceship_tex_07.png",
-		"assets/spaceship_tex_08.png",
-		"assets/spaceship_tex_09.png",
-		"assets/spaceship_tex_10.png",
+		// "assets/spaceship_tex_06.png",
+		// "assets/spaceship_tex_07.png",
+		// "assets/spaceship_tex_08.png",
+		// "assets/spaceship_tex_09.png",
+		// "assets/spaceship_tex_10.png",
 		"assets/spaceship_tex_11.png",
+		"assets/spaceship_tex_12.png",
+		"assets/spaceship_tex_13.png",
+		"assets/spaceship_tex_14.png",
+		"assets/spaceship_tex_15.png",
+		"assets/spaceship_tex_16.png",
+		"assets/spaceship_tex_17.png",
+		"assets/spaceship_tex_18.png",
+		"assets/spaceship_tex_19.png",
+		"assets/spaceship_tex_20.png",
+		"assets/spaceship_tex_21.png",
+		"assets/spaceship_tex_22.png",
+		"assets/spaceship_tex_23.png",
+		"assets/spaceship_tex_24.png",
+		"assets/spaceship_tex_25.png",
 	};
 
 	std::vector<std::string> videos = {
@@ -35,7 +49,7 @@ void ofApp::setup(){
 	// FBO sources should be added before piMapper.setup() so the
 	// piMapper is able to load the source if it is assigned to
 	// a surface in XML settings.
-	for (auto source_idx : boost::irange(0, 7))
+	for (auto source_idx : boost::irange(0, 3))
 	{
 		const string name = "Source_" + to_string(source_idx);
 		const auto source = make_shared<TextureSource>(name, images, videos);
@@ -51,7 +65,7 @@ void ofApp::setup(){
 	ofSetFullscreen(Settings::instance()->getFullscreen());
 	ofSetEscapeQuitsApp(false);
 
-	register_midi_trigger(images.size() + videos.size());
+	register_midi_trigger(images.size() + videos.size() + 1);
 }
 
 void ofApp::update(){
@@ -94,7 +108,7 @@ void ofApp::register_midi_trigger(const size_t node_count)
 	const size_t midi_root_channel = 1;
 	const size_t midi_root_note = 12;
 
-	for (auto source_idx: boost::irange(0, 15))
+	for (auto source_idx: boost::irange(0, 3))
 	{
 		for (auto node_idx: boost::irange(0, int(node_count)))
 		{

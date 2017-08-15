@@ -23,18 +23,14 @@ node::node()
 
 auto node::draw() -> void
 {
-    if (active_)
-    {
-        const int offset = - QUAD_HEIGHT + y_.get();
-        ofSetColor(255, 255, 255, alpha_.get());
+    const int offset = - QUAD_HEIGHT + y_.get();
+    ofSetColor(255, 255, 255, alpha_.get());
 
-        texture_.draw(x_.get(), y_.get());
-
-        // frank: 0175 8808861
-        // texture2_.draw(-20 + y_.get(), -20 + (y_.get() / 6));
-        // texture2_.draw(0, offset);
-        // texture2_.draw(0, offset - 153);
-    }  
+    texture_.draw(x_.get(), y_.get());
+    // frank: 0175 8808861
+    // texture2_.draw(-20 + y_.get(), -20 + (y_.get() / 6));
+    // texture2_.draw(0, offset);
+    // texture2_.draw(0, offset - 153); 
 }
 
 auto node::alpha_changed(size_t& alpha) -> void
@@ -54,13 +50,51 @@ file_node::file_node(const std::string filename)
 
 //-----------------------------------------------------------------------------
 
+triangle_node::triangle_node()
+    : node()
+    , rotations_(0)
+{
+}
+
+auto triangle_node::update() -> void
+{
+
+}
+
+auto triangle_node::draw() -> void
+{ 
+    // ofPushMatrix();
+    
+    // ofSetColor(0, 0, 255);
+    // ofFill();
+    // ofTranslate(QUAD_WIDTH / 2, QUAD_HEIGHT / 2);
+    // ofRotateZDeg(rotations_);
+    // rotations_++;
+    // // ofDrawTriangle(0, 0, QUAD_WIDTH / 2, 0, 0, QUAD_HEIGHT);
+    // ofDrawTriangle(QUAD_WIDTH / 2, 0, QUAD_WIDTH, QUAD_HEIGHT, 0, QUAD_HEIGHT);
+    
+    // ofPopMatrix();
+
+    // ofPushMatrix();
+    //     ofTranslate(QUAD_WIDTH / 2, QUAD_HEIGHT / 2, 0);//move pivot to centre
+    //     ofRotateZDeg(rotations_);
+    //     ofPushMatrix();
+    //         // ofTranslate(-QUAD_WIDTH / 2, -QUAD_HEIGHT / 2, 0);//move back by the centre offset
+    //         ofDrawTriangle(QUAD_WIDTH / 2, 0, QUAD_WIDTH, QUAD_HEIGHT, 0, QUAD_HEIGHT);
+    //     ofPopMatrix();
+    // ofPopMatrix();
+}
+
+// ofPoint move_square(size_t width, size_t height)
+// {
+    
+// }
+
+//-----------------------------------------------------------------------------
+
 color_node::color_node() 
     : node()
 {
-    ofColor black{0, 0, 0, 0};
-    pxs_.allocate(QUAD_WIDTH, QUAD_HEIGHT, OF_IMAGE_COLOR_ALPHA);
-	pxs_.setColor(black);
-
     parameters_.add(r_.set("r", 0));
     parameters_.add(g_.set("g", 0));
     parameters_.add(b_.set("b", 0));
@@ -68,13 +102,13 @@ color_node::color_node()
 
 auto color_node::update() -> void
 {
-    image::set_channel(pxs_, 0, r_.get());
-    image::set_channel(pxs_, 1, g_.get());
-    image::set_channel(pxs_, 2, b_.get());
+}
 
-    texture_.loadData(pxs_);
-
-    node::update();
+auto color_node::draw() -> void
+{
+    // ofSetColor(r_.get(), g_.get(), b_.get(), alpha_.get());
+    ofSetColor(0, 0, 255);
+    ofFill();
 }
 
 //-----------------------------------------------------------------------------
@@ -110,6 +144,11 @@ auto video_node::update() -> void
         ofLogNotice("video_node::update()") << "Player not initialized";
 }
 
+auto video_node::draw() -> void
+{
+    node::draw();
+}
+
 //-----------------------------------------------------------------------------
 
 auto graph::update() -> void
@@ -124,7 +163,8 @@ auto graph::draw() -> void
 {
     for (auto& node: nodes_)
     {
-        node->draw();
+        if(node->is_active())
+            node->draw();
     }
 }
 

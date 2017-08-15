@@ -21,9 +21,10 @@ public:
     node();
 
     virtual auto update() -> void {}
-    auto draw() -> void;
+    virtual auto draw() -> void;
     auto alpha_changed(size_t& alpha) -> void;
 
+    auto is_active() -> bool { return active_; }
     auto parameters() -> ofParameterGroup& { return parameters_; }
 
 protected:
@@ -48,6 +49,26 @@ public:
 
 //-----------------------------------------------------------------------------
 
+using Triangle = vector<ofPoint>;
+
+class triangle_node : public node {
+
+public:
+    triangle_node();
+
+    auto update() -> void;
+    auto draw() -> void;
+
+private:
+    ofFbo fbo_;
+    vector<Triangle> mask_;
+    size_t rotations_;
+
+    // ofPoint move_square(size_t width, size_t height);
+};
+
+//-----------------------------------------------------------------------------
+
 class video_node : public node {
 
 public:
@@ -68,21 +89,18 @@ private:
 
 //-----------------------------------------------------------------------------
 
-using generate_fn = std::function<void(ofImage&)>;
-
 class color_node : public node {
 
 public:
     color_node();
 
     auto update() -> void;
+    auto draw() -> void;
 
 private:
     ofParameter<size_t> r_;
     ofParameter<size_t> g_;
     ofParameter<size_t> b_;
-
-    ofPixels pxs_;
 };
 
 //-----------------------------------------------------------------------------
